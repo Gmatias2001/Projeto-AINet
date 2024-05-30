@@ -50,7 +50,7 @@ class User extends Authenticatable
 
     public function customerRef():HasOne
     {
-       return $this->hasOne(Customer::class);
+       return $this->hasOne(Customer::class,'id','id');
     }
 
 }
