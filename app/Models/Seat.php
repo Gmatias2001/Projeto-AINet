@@ -16,11 +16,11 @@ class Seat extends Model
 
     public function ticketRef():HasMany
      {
-        return $this->hasMany(Ticket::class);
+        return $this->hasMany(Ticket::class,'id','seat_id');
      }
 
      public function theaterRef():HasOne
      {
-        return $this->hasOne(Theater::class);
+        return $this->hasOne(Theater::class,'theater_id','id');
      }
 }

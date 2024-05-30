@@ -16,16 +16,16 @@ class Ticket extends Model
 
     public function purchaseRef():HasOne
      {
-        return $this->hasOne(Purchase::class);
+        return $this->hasOne(Purchase::class,'purchase_id','id');
      }
 
      public function screeningRef():HasOne
      {
-        return $this->hasOne(Screening::class);
+        return $this->hasOne(Screening::class,'screening_id','id');
      }
-     
+
      public function seatRef():HasOne
      {
-        return $this->hasOne(Seat::class);
+        return $this->hasOne(Seat::class,'seat_id','id');
      }
 }

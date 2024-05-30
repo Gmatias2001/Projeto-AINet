@@ -13,7 +13,7 @@ class Movie extends Model
     use HasFactory;
 
     protected $fillable =['title','genre_code','year','poster_filename','synopsis','trailer_url'];
-    
+
     public function genreRef():HasOne
      {
         return $this->hasOne(Genre::class,'genre_code','code');
