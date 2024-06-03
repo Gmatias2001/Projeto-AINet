@@ -17,7 +17,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <header>
-        <div class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+        <div class="bg-white border-b border-gray-100">
             <div >
                 <div class="flex justify-between h-16">
                     <div class="flex">
@@ -29,12 +29,12 @@
                         </div>
 
                         <!-- Navigation Links -->
-                        <div class="inline-flex items-center px-3 pt-1 border-b-2 border-transparent text-lg  leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out">
+                        <div class="inline-flex items-center px-3 pt-1 border-b-2 border-transparent text-lg  leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                             <a  href="dashboard" :active="request()->routeIs('dashboard')">
                                 {{ __('Dashboard') }}
                             </a>
                         </div>
-                        <div class="inline-flex items-center px-3 pt-1 border-b-2 border-indigo-400 dark:border-indigo-600 text-lg leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
+                        <div class="inline-flex items-center px-3 pt-1 border-b-2 border-indigo-400 text-lg leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
                             <a>
                                 {{ __('Movies') }}
                             </a>
@@ -47,8 +47,8 @@
     <body>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
                         <table>
                             <thead>
                                 <tr>

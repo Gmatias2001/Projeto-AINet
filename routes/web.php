@@ -4,11 +4,15 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 
+// REPLACE THIS
+// Route::get('/', function () {
+//     return view('welcome');
+// })->name('home');
+
+//WITH THIS
 Route::get('/', [MovieController::class, 'index']);
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+Route::get('movie', [MovieController::class, 'movieDetail']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

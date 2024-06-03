@@ -15,7 +15,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="leading-normal tracking-normal bg-cover bg-fixed" style="background-image: url('./header.png');">
+<body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url('./header.png');">
     <div class="h-full">
         <!--Nav-->
         <div class="w-full my-6 container mx-auto">
@@ -24,10 +24,11 @@
                     Cine<span
                         class="h-16 bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Magic</span>
                 </a>
-                <a class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl"
+                <a class="items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl inline-block  hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                     href="/login">
                     Login
                 </a>
+
             </div>
         </div>
 
@@ -44,16 +45,14 @@
             </div>
         </div>
 
-        <div class="w-full container mx-auto grid grid-cols-4 gap-7">
+        <div class="w-full container mx-auto grid grid-cols-3 gap-14 md:grid-cols-4">
             @foreach ($movies as $movie)
-                <div class="w-64 h-96 opacity-75 hover:opacity-100 pt-5 pl-5 hover:pl-6 shadow-lg rounded-lg">
-                    <div class="flex-none w-64 h-96 relative">
-                        <img src="./storage/posters/{{ $movie->poster_filename }}"
-                            alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg"
-                            loading="lazy" />
-                    </div>
+                <div class="size-auto rounded-md focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
+                    <img src="./storage/posters/{{ $movie->poster_filename }}" alt=""
+                        class="w-full h-full rounded-xl" loading="lazy"/>
                 </div>
             @endforeach
+
 
         </div>
 
