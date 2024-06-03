@@ -46,24 +46,12 @@
 
         <div class="w-full container mx-auto grid grid-cols-4 gap-7">
             @foreach ($movies as $movie)
-                <div class="w-64 h-96 bg-gray-900 opacity-75 shadow-lg rounded-lg">
+                <div class="w-64 h-96 opacity-75 hover:opacity-100 pt-5 pl-5 hover:pl-6 shadow-lg rounded-lg">
                     <div class="flex-none w-64 h-96 relative">
-                        <img src="https://cdn.nos.pt/cinemas/movies/files/700x1000/7785bee1-cdee-432c-a51c-5cdfac29c869_Image.jpg"
+                        <img src="./storage/posters/{{ $movie->poster_filename }}"
                             alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg"
                             loading="lazy" />
                     </div>
-                    <div class="">
-
-
-                            <a
-                                class="hidden hover:visible w-full flex-none mt-2 order-1 text-3xl font-bold text-blue-300">
-                                {{ $movie->title }}
-                            </a>
-
-
-
-                    </div>
-
                 </div>
             @endforeach
 
