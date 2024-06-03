@@ -18,7 +18,7 @@ class MovieController extends Controller
     public function movieDetail(): View
     {
         //$allMovies = Movie::all();
-        $movie = Movie::select(1);
+        $movie = Movie::paginate(1);
         return view('movie')->with('movies', $movie);
     }
 
