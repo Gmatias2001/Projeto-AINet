@@ -12,7 +12,7 @@ use App\Http\Controllers\MovieController;
 //WITH THIS
 Route::get('/', [MovieController::class, 'index']);
 
-Route::get('movie', [MovieController::class, 'movieDetail']);
+Route::get('/movie/{id}', [MovieController::class, 'details']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

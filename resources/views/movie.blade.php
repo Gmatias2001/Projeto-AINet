@@ -15,8 +15,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed"
-    style="background-image: url('./header.png');">
+<body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url('./header.png');">
     <div class="h-full">
         <!--Nav-->
         <div class="w-full my-6 container mx-auto">
@@ -32,51 +31,28 @@
             </div>
         </div>
 
-        @foreach ($movies as $movie)
-            <!--Main-->
-            <div class="w-full container mx-auto">
-
-                <div class="col-span-2">
-                    <div class="opacity-20">
-                        <img src="./storage/posters/{{ $movie->poster_filename }}" alt=""
-                            class="w-full overflow-clip " loading="lazy" />
-                    </div>
-                <div class="absolute w-full h-16  flow-clip over flow-hidden grid grid-cols-2">
-
-
-
-                    <!--Filmes-->
-                    <div class="justify-center">
-                        <h1 class="absolute mt-8 text-5xl text-white font-bold leading-tight text-left">
-                            {{ $movie->title }}
-                        </h1>
-                        <p class="absolute leading-normal text-indigo-400 text-2xl mb-11 text-left">
-                            Ainda não sei o que escrever aqui, mas vou descobrir!
-                        </p>
-                    </div>
-                </div>
+        <!--Main-->
+        <div class="w-full container mx-auto">
+            <!--Filmes-->
+            <div class="justify-center">
+                <h1 class="mt-8 text-5xl text-white opacity-75 font-bold leading-tight text-left">
+                    Filmes em exibição
+                </h1>
+                <p class="leading-normal text-indigo-400 text-2xl mb-11 text-left">
+                    Ainda não sei o que escrever aqui, mas vou descobrir!
+                </p>
             </div>
+        </div>
 
-            <div class="w-full container mx-auto grid grid-cols-3 gap-14 md:grid-cols-4">
-
+        <div class="w-full container mx-auto grid grid-cols-3 gap-14 md:grid-cols-4">
                 <div
                     class="size-auto rounded-md focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
                     <img src="./storage/posters/{{ $movie->poster_filename }}" alt=""
                         class="w-full h-full rounded-xl" loading="lazy" />
                 </div>
-
-
-
-            </div>
-
-
-
-
-
-
+        </div>
     </div>
-    </div>
-    @endforeach
+
 
     <!--Footer-->
     <div class="w-full my-14 container mx-auto flex items-center justify-between">

@@ -15,13 +15,41 @@ class MovieController extends Controller
         return view('index')->with('movies', $allMovies);
     }
 
-    public function movieDetail(): View
+    public function details(string $id): View
     {
-        //$allMovies = Movie::all();
-        $movie = Movie::paginate(1);
-        return view('movie')->with('movies', $movie);
+        return view('movie', ['movie' => Movie::findOrFail($id)]);
     }
 
+    public function create(): View
+    {
+        $newMovie = new Movie();
+        return view ('movies.create')->with('movie', $newMovie);
+    }
+
+
+    public function store(Request $request)
+    {
+
+    }
+
+
+
+    public function edit(Movie $movie)
+    {
+
+    }
+
+
+    public function update(Request $request, Movie $movie)
+    {
+
+    }
+
+
+    public function destroy(Movie $movie)
+    {
+
+    }
 
 
 }
