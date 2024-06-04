@@ -21,7 +21,7 @@
         <!--Nav-->
         <div class="w-full my-6 container mx-auto">
             <div class="flex items-center justify-between">
-                <a class="flex  text-indigo-400 font-bold text-4xl" href="#">
+                <a class="flex  text-indigo-400 font-bold text-4xl" href="/">
                     Cine<span
                         class="h-16 bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Magic</span>
                 </a>
@@ -49,7 +49,7 @@
         <div class="w-full container mx-auto grid grid-cols-3 gap-14 md:grid-cols-4">
             @foreach ($movies as $movie)
                 <a href="/movie/{{ $movie->id }}">
-                    <div class="size-auto rounded-md">
+                    <div class="size-auto rounded-md focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
                         <img src="{{ $movie->PosterFullUrl }}" alt=""
                             class="w-full h-full rounded-xl" loading="lazy" />
                     </div>

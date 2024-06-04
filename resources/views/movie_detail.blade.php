@@ -20,7 +20,7 @@
         <!--Nav-->
         <div class="w-full my-6 container mx-auto">
             <div class="flex items-center justify-between">
-                <a class="flex  text-indigo-400 font-bold text-4xl" href="#">
+                <a class="flex  text-indigo-400 font-bold text-4xl" href="/">
                     Cine<span
                         class="h-16 bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Magic</span>
                 </a>
