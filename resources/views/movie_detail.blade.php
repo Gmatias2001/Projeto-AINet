@@ -15,7 +15,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed"
-    style="background-image: url('../header.png');">
+    style="background-image: url('/header.png');">
     <div class="h-full">
         <!--Nav-->
         <div class="w-full my-6 container mx-auto">
