@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Movie extends Model
 {
@@ -23,4 +24,15 @@ class Movie extends Model
      {
         return $this->hasMany(Screening::class,'id','movie_id');
      }
+
+     public function getPosterFullUrlAttribute()
+    {
+        debug($this->poster_filename);
+
+        if ($this->poster_filename && Storage::exists("public/posters/{$this->poster_filename}")) {
+            return asset("storage/posters/{$this->poster_filename}");
+        } else {
+            return asset("storage/posters/anonymous.png");
+        }
+    }
 }

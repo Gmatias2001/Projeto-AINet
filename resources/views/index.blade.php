@@ -16,7 +16,7 @@
 </head>
 
 <body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed"
-    style="background-image: url('./header.png');">
+    style="background-image: url('../header.png');">
     <div class="h-full">
         <!--Nav-->
         <div class="w-full my-6 container mx-auto">
@@ -48,11 +48,12 @@
 
         <div class="w-full container mx-auto grid grid-cols-3 gap-14 md:grid-cols-4">
             @foreach ($movies as $movie)
-                <div
-                    class="size-auto rounded-md focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
-                    <img src="./storage/posters/{{ $movie->poster_filename }}" alt=""
-                        class="w-full h-full rounded-xl" loading="lazy" />
-                </div>
+                <a href="/movie/{{ $movie->id }}">
+                    <div class="size-auto rounded-md">
+                        <img src="./storage/posters/{{ $movie->poster_filename }}" alt=""
+                            class="w-full h-full rounded-xl" loading="lazy" />
+                    </div>
+                </a>
             @endforeach
         </div>
     </div>

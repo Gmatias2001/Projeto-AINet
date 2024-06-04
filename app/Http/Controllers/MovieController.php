@@ -17,7 +17,9 @@ class MovieController extends Controller
 
     public function details(string $id): View
     {
-        return view('movie', ['movie' => Movie::findOrFail($id)]);
+        $movie = Movie::findOrFail($id);
+        //dd($movie);
+        return view('movie_detail')->with('movie', $movie);
     }
 
     public function create(): View
