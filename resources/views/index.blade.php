@@ -17,6 +17,7 @@
 
 <body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed"
     style="background-image: url('/header.png');">
+    overflow: hidden;
     <div class="h-full">
         <!--Nav-->
         <div class="w-full my-6 container mx-auto">

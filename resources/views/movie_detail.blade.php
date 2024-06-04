@@ -14,6 +14,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed"
     style="background-image: url('/header.png');">
     <div class="h-full">
@@ -33,27 +34,35 @@
         </div>
 
         <!--Main-->
-        <div class="w-full container mx-auto">
-            <!--Filmes-->
-            <div class="justify-center">
+
+
+
+        <div class="w-full h-auto grid grid-flow-col grid-cols-2">
+            <div class="w-56 h-auto">
+                <img src="{{ $movie->PosterFullUrl }}" alt="" class="rounded-xl " />
+            </div>
+            <div class="">
                 <h1 class="mt-8 text-5xl text-white opacity-75 font-bold leading-tight text-left">
-                    Filmes em exibição
+                    {{ $movie->title }}
                 </h1>
                 <p class="leading-normal text-indigo-400 text-2xl mb-11 text-left">
-                    Ainda não sei o que escrever aqui, mas vou descobrir!
+                    {{ $movie->synopsis }}
+                </p>
+                <p class="leading-normal text-indigo-400 text-2xl mb-11 text-left">
+                    {{ $movie->genre_code }}
+                </p>
+                <p class="leading-normal text-indigo-400 text-2xl mb-11 text-left">
+                    {{ $movie->year }}
+                </p>
+                <p class="leading-normal text-indigo-400 text-2xl mb-11 text-left">
+                    {{ $movie->trailer_url }}
                 </p>
             </div>
-        </div>
 
-        <div class="w-full container mx-auto grid grid-cols-3 gap-14 md:grid-cols-4">
-
-                <div
-                    class="">
-                    <img src="{{ $movie->PosterFullUrl }}" alt=""
-                        class="w-full h-full rounded-xl" />
-                </div>
 
         </div>
+
+
     </div>
 
 
