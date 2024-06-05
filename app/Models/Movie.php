@@ -13,19 +13,19 @@ class Movie extends Model
 {
     use HasFactory;
 
-    protected $fillable =['title','genre_code','year','poster_filename','synopsis','trailer_url'];
+    protected $fillable = ['title', 'genre_code', 'year', 'poster_filename', 'synopsis', 'trailer_url'];
 
-    public function genreRef():HasOne
-     {
-        return $this->hasOne(Genre::class,'genre_code','code');
-     }
+    public function genreRef(): HasOne
+    {
+        return $this->hasOne(Genre::class, 'genre_code', 'code');
+    }
 
-     public function screeningRef():HasMany
-     {
-        return $this->hasMany(Screening::class,'id','movie_id');
-     }
+    public function screeningRef(): HasMany
+    {
+        return $this->hasMany(Screening::class, 'id', 'movie_id');
+    }
 
-     public function getPosterFullUrlAttribute()
+    public function getPosterFullUrlAttribute()
     {
         debug($this->poster_filename);
 

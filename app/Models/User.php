@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -53,4 +54,14 @@ class User extends Authenticatable
        return $this->hasOne(Customer::class,'id','id');
     }
 
+    public function getPhotoFullUrlAttribute()
+    {
+        debug($this->photo_filename);
+
+        if ($this->photo_filename && Storage::exists("public/photos/{$this->photo_filename}")) {
+            return asset("storage/photos/{$this->photo_filename}");
+        } else {
+            return asset("storage/photos/anonymous.png");
+        }
+    }
 }
