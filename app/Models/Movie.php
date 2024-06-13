@@ -22,7 +22,7 @@ class Movie extends Model
 
     public function screeningRef(): HasMany
     {
-        return $this->hasMany(Screening::class, 'id', 'movie_id');
+        return $this->hasMany(Screening::class, 'movie_id', 'id'); //ORDEM CERTA
     }
 
     public function getPosterFullUrlAttribute()

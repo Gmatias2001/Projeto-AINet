@@ -26,6 +26,6 @@ class Screening extends Model
 
     public function movieRef():HasOne
     {
-       return $this->hasOne(Movie::class,'movie_id','id');
+       return $this->hasOne(Movie::class, 'id', 'movie_id'); //ORDEM CERTA
     }
 }
