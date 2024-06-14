@@ -27,6 +27,11 @@
                         Cine<span
                             class="h-16 bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Magic</span>
                     </a>
+                    <!-- botao lista filmes -->
+        <a class="ml-6 items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl inline-block  hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+            href="/lista_movies">
+            Movies
+        </a>
                     @if (Auth::user() == false)
                         <a class="items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl inline-block  hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                             href="/login">
