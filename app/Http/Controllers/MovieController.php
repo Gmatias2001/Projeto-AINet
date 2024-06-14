@@ -17,7 +17,9 @@ class MovieController extends Controller
         $Movies = Movie::whereIn('id', $screeningMovies)->paginate(20);
 
         return view('index',['movies' => $Movies]);
+    
     }
+
 
     public function details(string $id): View
     {
