@@ -3,20 +3,7 @@
 @section('content')
     <!--Main-->
     <div class="w-full container mx-auto">
-        <!-- Title and Button -->
-        <div class="flex justify-between items-center">
-            <div class="flex items-center">
-                <h1 class="mt-8 text-5xl text-white opacity-75 font-bold leading-tight">
-                    CineMagic
-                </h1>
-                <a href="/outra-pagina" class="ml-4">
-                    <button class="new-button mt-8 text-white opacity-75 font-bold leading-tight">
-                        Outra página
-                    </button>
-                </a>
-            </div>
-        </div>
-        <!-- Filmes -->
+        <!--Filmes-->
         <div class="justify-center">
             <h1 class="mt-8 text-5xl text-white opacity-75 font-bold leading-tight text-left">
                 Filmes em exibição
@@ -37,3 +24,5 @@
         @endforeach
     </div>
 @endsection
+
+</html>
