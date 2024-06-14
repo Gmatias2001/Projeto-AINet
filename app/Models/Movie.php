@@ -35,4 +35,8 @@ class Movie extends Model
             return asset("storage/posters/anonymous.png");
         }
     }
+
+    protected $primaryKey = 'id'; 
+    public $incrementing = false; 
+    protected $keyType = 'string'; 
 }

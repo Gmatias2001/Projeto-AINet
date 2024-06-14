@@ -7,7 +7,6 @@
                 <th>ID</th>
                 <th>Title</th>
                 <th>Gender Code</th>
-                <th>Year</th>
             </tr>
         </thead>
         <tbody>
@@ -15,8 +14,7 @@
                 <tr>
                     <td>{{ $movie->id }}</td>
                     <td>{{ $movie->title }}</td>
-                    <td>{{ $movie->gender_code }}</td>
-                    <td>{{ $movie->year }}</td>
+                    <td>{{ $movie->genre_code }}</td>
                 </tr>
             @endforeach
         </tbody>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Screening;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class MovieController extends Controller
 {
@@ -35,14 +36,19 @@ class MovieController extends Controller
 
     public function create(): View
     {
-        $newMovie = new Movie();
-        return view('movies.create')->with('movie', $newMovie);
+        return view('movies.create');
     }
 
 
-    public function store(Request $request)
-    {
+    public function store(Request $request): RedirectResponse 
+    { 
+        Movie::create($request->all()); 
+        return redirect('/movies'); 
+        
+        
     }
+    
+    
 
 
 

@@ -29,6 +29,15 @@ Route::get('/tickets/purchase', [TicketController::class, 'showPurchasePage'])->
 Route::post('/tickets/purchase', [TicketController::class, 'purchaseTicket'])->name('tickets.purchase.post');   //FEITO PELO CHATGPT
 Route::get('/tickets/success/{ticket}', [TicketController::class, 'showSuccessPage'])->name('tickets.success'); //
 
+
+
+
+
+
+Route::get('movieslist/create', [MovieController::class, 'create']); 
+
+Route::post('courses', [CourseController::class, 'store']);
+
 require __DIR__.'/auth.php';
 
 
