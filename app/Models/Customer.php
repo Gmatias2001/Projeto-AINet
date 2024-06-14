@@ -16,7 +16,7 @@ class Customer extends Model
 
     public function purchaseRef():HasMany
     {
-       return $this->hasMany(Purchase::class,'customer_id','id');
+       return $this->hasMany(Purchase::class,'id','customer_id');
     }
 
     public function userRef():HasOne

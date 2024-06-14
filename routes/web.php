@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
-use App\Http\Controllers\TicketController;
 
 // REPLACE THIS
 // Route::get('/', function () {
@@ -12,7 +11,7 @@ use App\Http\Controllers\TicketController;
 
 //WITH THIS
 Route::get('/', [MovieController::class, 'index']);
-Route::get('/movieslist', [MovieController::class, 'lista']);
+
 Route::get('/movie/{id}', [MovieController::class, 'details']);
 
 Route::get('/dashboard', function () {
@@ -25,19 +24,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/tickets/purchase', [TicketController::class, 'showPurchasePage'])->name('tickets.purchase');       //
-Route::post('/tickets/purchase', [TicketController::class, 'purchaseTicket'])->name('tickets.purchase.post');   //FEITO PELO CHATGPT
-Route::get('/tickets/success/{ticket}', [TicketController::class, 'showSuccessPage'])->name('tickets.success'); //
-
-
-
-
-
-
-Route::get('movieslist/create', [MovieController::class, 'create']); 
-
-Route::post('courses', [CourseController::class, 'store']);
-
 require __DIR__.'/auth.php';
-
-

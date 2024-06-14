@@ -17,12 +17,12 @@ class Movie extends Model
 
     public function genreRef(): HasOne
     {
-        return $this->hasOne(Genre::class,'code','genre_code'); //ORDEM CERTA
+        return $this->hasOne(Genre::class, 'genre_code', 'code');
     }
 
     public function screeningRef(): HasMany
     {
-        return $this->hasMany(Screening::class, 'movie_id', 'id'); //ORDEM CERTA
+        return $this->hasMany(Screening::class, 'id', 'movie_id');
     }
 
     public function getPosterFullUrlAttribute()
@@ -35,8 +35,4 @@ class Movie extends Model
             return asset("storage/posters/anonymous.png");
         }
     }
-
-    protected $primaryKey = 'id'; 
-    public $incrementing = false; 
-    protected $keyType = 'string'; 
 }
