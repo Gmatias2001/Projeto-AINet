@@ -12,7 +12,7 @@ use App\Http\Controllers\TicketController;
 
 //WITH THIS
 Route::get('/', [MovieController::class, 'index']);
-
+Route::get('/movieslist', [MovieController::class, 'lista']);
 Route::get('/movie/{id}', [MovieController::class, 'details']);
 
 Route::get('/dashboard', function () {
@@ -28,11 +28,6 @@ Route::middleware('auth')->group(function () {
 Route::get('/tickets/purchase', [TicketController::class, 'showPurchasePage'])->name('tickets.purchase');       //
 Route::post('/tickets/purchase', [TicketController::class, 'purchaseTicket'])->name('tickets.purchase.post');   //FEITO PELO CHATGPT
 Route::get('/tickets/success/{ticket}', [TicketController::class, 'showSuccessPage'])->name('tickets.success'); //
-
-
-
-
-Route::get('/movies', [ListaMovieController::class, 'lista_movies']);
 
 require __DIR__.'/auth.php';
 

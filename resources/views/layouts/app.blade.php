@@ -29,7 +29,7 @@
                     </a>
                     <!-- botao lista filmes -->
                     <a class="items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl inline-block  hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
-                        href="/lista_movies">
+                        href="/movieslist">
                         Movies
                     </a>
                     @if (Auth::user() == false)
