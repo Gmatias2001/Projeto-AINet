@@ -16,11 +16,11 @@ class Purchase extends Model
 
     public function customerRef():HasOne
      {
-        return $this->hasOne(Customer::class,'custumer_id','id');
+        return $this->hasOne(Customer::class,'id','custumer_id');
      }
 
      public function ticketRef():HasMany
      {
-        return $this->hasMany(Ticket::class,'id','purchase_id');
+        return $this->hasMany(Ticket::class,'screening_id','id');
      }
 }

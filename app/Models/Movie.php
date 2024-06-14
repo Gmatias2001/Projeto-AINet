@@ -17,7 +17,7 @@ class Movie extends Model
 
     public function genreRef(): HasOne
     {
-        return $this->hasOne(Genre::class, 'genre_code', 'code');
+        return $this->hasOne(Genre::class,'code','genre_code'); //ORDEM CERTA
     }
 
     public function screeningRef(): HasMany

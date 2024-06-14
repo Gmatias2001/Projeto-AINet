@@ -16,6 +16,6 @@ class Genre extends Model
 
     public function movieRef():HasMany
     {
-       return $this->hasMany(Movie::class,'code','genre_code');
+       return $this->hasMany(Movie::class,'genre_code','code');
     }
 }
