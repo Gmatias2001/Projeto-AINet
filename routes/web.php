@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\TicketController;
+use Illuminate\Http\RedirectResponse;
 
 // REPLACE THIS
 // Route::get('/', function () {
@@ -26,17 +27,20 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/tickets/purchase', [TicketController::class, 'showPurchasePage'])->name('tickets.purchase');       //
-Route::post('/tickets/purchase', [TicketController::class, 'purchaseTicket'])->name('tickets.purchase.post');   //FEITO PELO CHATGPT
+Route::post('/tickets/purchase', [TicketController::class, 'purchaseTicket'])->name('tickets.purchase.post');   //
 Route::get('/tickets/success/{ticket}', [TicketController::class, 'showSuccessPage'])->name('tickets.success'); //
 
 
 
 
 
+Route::get('/movies', [MovieController::class, 'store'])->name('movies.index');
 
-Route::get('movieslist/create', [MovieController::class, 'create']); 
+Route::get('/movieslist/create', [MovieController::class, 'create'])->name('movies.create'); 
 
-Route::post('courses', [CourseController::class, 'store']);
+Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
+
+
 
 require __DIR__.'/auth.php';
 
