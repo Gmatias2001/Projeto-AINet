@@ -7,9 +7,12 @@ use App\Models\Ticket;
 
 class CartController extends Controller
 {
-    public function show()
+    public function showCart()
     {
-        $itens = \Cart::getContent();
+        // Retrieve cart data from session
+        $cart = collect(session('cart', []));
+
+        return view('cart.show', compact('cart'));
     }
 
 

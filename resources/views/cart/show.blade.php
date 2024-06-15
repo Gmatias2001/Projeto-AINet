@@ -2,40 +2,39 @@
 
 @section('content')
 <div class="container mx-auto mt-8">
-    <h1 class="text-5xl font-bold mb-8">Detalhes do Bilhete</h1>
+    <h1 class="text-5xl font-bold mb-8">Seu Carrinho</h1>
 
-    <div class="flex justify-center">
-        <table class="min-w-full">
+    @if (session('alert-msg'))
+        <div class="alert {{ session('alert-type', 'alert-info') }}">
+            {!! session('alert-msg') !!}
+        </div>
+    @endif
+
+    @if ($cart->isEmpty())
+        <p>O carrinho está vazio.</p>
+    @else
+        <table class="min-w-full bg-white">
             <thead>
                 <tr>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Filme</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Assento</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Data da Sessão</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Hora da Sessão</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Remover</th>
+                    <th class="py-2">Filme</th>
+                    <th class="py-2">Data</th>
+                    <th class="py-2">Hora</th>
+                    <th class="py-2">QR Code</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($tickets as $ticket)
+                @foreach ($cart as $item)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->screening->movie->title }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->seat->row }}, {{ $ticket->seat->seat_number }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->screening->date }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->screening->date->start_time }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <form action="{{ route('cart.remove', ['ticket' => $ticket->id]) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">Remover</button>
-                            </form>
+                        <td class="py-2">{{ $item->movie_name }}</td>
+                        <td class="py-2">{{ $item->session_date }}</td>
+                        <td class="py-2">{{ $item->session_time }}</td>
+                        <td class="py-2">
+                            <img src="{{ $item->qr_code_url }}" alt="QR Code">
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-    </div>
-
+    @endif
 </div>
 @endsection

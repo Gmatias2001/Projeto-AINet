@@ -21,28 +21,49 @@ class TicketController extends Controller
     }
 
     public function purchaseTicket(Request $request, $movieId, $screeningId)
-{
-    $ticket = Ticket::create([
-        'screening_id' => $screeningId,
-        'seat_id' => $request->input('seat_id'),
-        'price' => config('app.ticket_price'), // Utilize uma configuração apropriada para o preço do bilhete
-        'qrcode_url' => $this->generateQrCodeUrl(), // Implemente a lógica de geração do QR code
-        'status' => 'valid'
-    ]);
+    {
+        // Validate the form data
+        $request->validate([
+            'screening_id' => 'required|exists:screenings,id',
+            'seat_id' => 'required|exists:seats,id',
+        ]);
 
-    if (!$ticket) {
-        return back()->with('error', 'Erro ao criar o bilhete.');
+        // Retrieve movie and screening details for the ticket
+        $movie = Movie::findOrFail($movieId);
+        $screening = Screening::findOrFail($screeningId);
+
+        // Create a new Ticket instance using the create method
+        $ticket = Ticket::create([
+            'screening_id' => $screening->id,
+            'seat_id' => $request->seat_id,
+            'purchase_id' => null, // Assuming a purchase will be created later
+            'price' => 10.00, // Set a default price or retrieve from the screening or seat
+            'qrcode_url' => $this->generateQrCodeUrl(),
+            'status' => 'pending', // Assuming default status is pending
+        ]);
+
+        // Add movie details to the ticket for display purposes
+        $ticket->movie_name = $movie->title;
+        $ticket->session_date = $screening->date;
+        $ticket->session_time = $screening->start_time;
+
+        // Retrieve the cart from the session, or initialize a new collection if it doesn't exist
+        $cart = collect(session('cart', []));
+
+        // Check if the ticket is already in the cart
+        if ($cart->contains('id', $ticket->id)) {
+            $alertType = 'warning';
+            $htmlMessage = "Ticket for movie <strong>\"{$ticket->movie_name}\"</strong> on <strong>{$ticket->session_date} at {$ticket->session_time}</strong> was not added to the cart because it is already there!";
+        } else {
+            $cart->push($ticket);
+            $request->session()->put('cart', $cart);
+            $alertType = 'success';
+            $htmlMessage = "Ticket for movie <strong>\"{$ticket->movie_name}\"</strong> on <strong>{$ticket->session_date} at {$ticket->session_time}</strong> has been added to your cart!";
+        }
+
+        // Redirect to cart page with a success message
+        return redirect()->route('cart.show')->with('alert-msg', $htmlMessage)->with('alert-type', $alertType);
     }
-
-    // Adicionar o bilhete ao carrinho (seção)
-    $cart = $request->session()->get('cart', []);
-    $cart[] = $ticket->id;
-    $request->session()->put('cart', $cart);
-
-    // Redirecionar para a página do carrinho
-    return redirect()->route('cart.show')->with('success', 'Bilhete adicionado ao carrinho com sucesso.');
-
-}
 
 
     private function generateQrCodeUrl()

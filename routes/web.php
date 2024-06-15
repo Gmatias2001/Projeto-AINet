@@ -31,7 +31,7 @@ Route::post('/movie/{movie}/{screening}/ticket/purchase', [TicketController::cla
 
 Route::delete('/cart/{ticket}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::post('/cart', [CartController::class, 'confirm'])->name('cart.confirm');
 
 
