@@ -11,18 +11,16 @@ use App\Models\Movie;
 class TicketController extends Controller
 {
     public function showPurchasePage($movieId, $date)
-{
-    $movie = Movie::findOrFail($movieId);
-    $screening = Screening::where('movie_id', $movieId)->where('date', $date)->firstOrFail();
-    $seats = Seat::all();
-    $screenings = Screening::where('movie_id', $movieId)->get(); // Adicione esta linha para obter todas as sessões disponíveis
+    {
+        $movie = Movie::findOrFail($movieId);
+        $screening = Screening::where('movie_id', $movieId)->where('date', $date)->firstOrFail();
+        $seats = Seat::all();
+        $screenings = Screening::where('movie_id', $movieId)->get(); // Adicione esta linha para obter todas as sessões disponíveis
 
-    return view('tickets.purchase', compact('movie', 'screening', 'seats', 'screenings'));
-}
+        return view('tickets.purchase', compact('movie', 'screening', 'seats', 'screenings'));
+    }
 
-
-
-public function purchaseTicket(Request $request, $movieId, $screeningId)
+    public function purchaseTicket(Request $request, $movieId, $screeningId)
 {
     $ticket = Ticket::create([
         'screening_id' => $screeningId,
@@ -32,20 +30,26 @@ public function purchaseTicket(Request $request, $movieId, $screeningId)
         'status' => 'valid'
     ]);
 
-    return redirect()->route('tickets.success', ['ticket' => $ticket->id]);
+    if (!$ticket) {
+        return back()->with('error', 'Erro ao criar o bilhete.');
+    }
+
+    // Adicionar o bilhete ao carrinho (seção)
+    $cart = $request->session()->get('cart', []);
+    $cart[] = $ticket->id;
+    $request->session()->put('cart', $cart);
+
+    // Redirecionar para a página do carrinho
+    return redirect()->route('cart.show')->with('success', 'Bilhete adicionado ao carrinho com sucesso.');
+
 }
 
 
-    public function showSuccessPage($ticketId)
-    {
-        $ticket = Ticket::findOrFail($ticketId);
-
-        return view('tickets.success', compact('ticket'));
-    }
-
     private function generateQrCodeUrl()
     {
-        // Implement the QR code generation logic here
+        // Implemente a lógica de geração do QR code aqui
         return 'generated_qr_code_url';
     }
+
+
 }

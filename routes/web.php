@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\CartController;
 
 // REPLACE THIS
 // Route::get('/', function () {
@@ -27,8 +28,11 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/movie/{movie}/{date}/ticket/purchase', [TicketController::class, 'showPurchasePage'])->name('tickets.purchase');
 Route::post('/movie/{movie}/{screening}/ticket/purchase', [TicketController::class, 'purchaseTicket'])->name('tickets.purchase.post');
-Route::get('/ticket/success/{ticket}', [TicketController::class, 'showSuccessPage'])->name('tickets.success');
 
+Route::delete('/cart/{ticket}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+Route::post('/cart', [CartController::class, 'confirm'])->name('cart.confirm');
 
 
 
