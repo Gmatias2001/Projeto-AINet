@@ -15,6 +15,7 @@ Route::get('/', [MovieController::class, 'index']);
 Route::get('/movieslist', [MovieController::class, 'lista']);
 Route::get('/movie/{id}', [MovieController::class, 'details']);
 
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -24,10 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('/movie/{movie}/{date}/ticket/purchase', [TicketController::class, 'showPurchasePage'])->name('tickets.purchase');
+Route::post('/movie/{movie}/{screening}/ticket/purchase', [TicketController::class, 'purchaseTicket'])->name('tickets.purchase.post');
+Route::get('/ticket/success/{ticket}', [TicketController::class, 'showSuccessPage'])->name('tickets.success');
 
-Route::get('/tickets/purchase', [TicketController::class, 'showPurchasePage'])->name('tickets.purchase');       //
-Route::post('/tickets/purchase', [TicketController::class, 'purchaseTicket'])->name('tickets.purchase.post');   //FEITO PELO CHATGPT
-Route::get('/tickets/success/{ticket}', [TicketController::class, 'showSuccessPage'])->name('tickets.success'); //
 
 
 
@@ -36,7 +37,6 @@ Route::get('/tickets/success/{ticket}', [TicketController::class, 'showSuccessPa
 
 Route::get('movieslist/create', [MovieController::class, 'create']); 
 
-Route::post('courses', [CourseController::class, 'store']);
 
 require __DIR__.'/auth.php';
 

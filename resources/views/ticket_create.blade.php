@@ -7,18 +7,24 @@
     <p class="mb-4">Data da Sessão: {{ $screening->date }}</p>
     <p class="mb-4">Horário: {{ $screening->start_time }}</p>
     
-    <form action="{{ route('ticket.add', ['screening' => $screening->id, 'seat' => 1]) }}" method="POST">
-    @csrf
-        <div class="mb-4">
-            <label for="seat" class="block text-sm font-medium text-gray-700">Escolha o Assento:</label>
-            <select id="seat" name="seat" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-             <!--   @foreach($seats as $seat)
-                    <option value="{{ $seat->id }}">{{ $seat->row }}{{ $seat->seat_number }}</option>
-                @endforeach-->
-            </select>
-        </div>
+    <form action="{{ route('tickets.purchase.post', ['movie' => $movie->id, 'screening' => $screening->id]) }}" method="POST">
+        @csrf
+        <label for="screening_id">Sessão:</label>
+        <select name="screening_id" id="screening_id">
+            @foreach ($screenings as $screening)
+                <option value="{{ $screening->id }}"> - {{ $screening->start_time }}</option>
+            @endforeach
+        </select>
+        <br>
+        <label for="seat_id">Lugar:</label>
+        <select name="seat_id" id="seat_id">
+            @foreach ($seats as $seat)
+                <option value="{{ $seat->id }}">Fila {{ $seat->row }}, Assento {{ $seat->seat_number }}</option>
+            @endforeach
+        </select>
+        <br>
         <button type="submit" class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
-            Adicionar ao Carrinho
+            Comprar
         </button>
     </form>
 </div>

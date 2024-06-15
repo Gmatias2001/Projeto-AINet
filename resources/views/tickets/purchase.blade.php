@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Selecione a Sessão e o Lugar</h1>
-    <form action="{{ route('tickets.purchase.post') }}" method="POST">
+<div class="container mx-auto mt-8">
+    <h1 class="text-5xl font-bold mb-8">Criar Bilhete para {{ $movie->title }}</h1>
+    
+    <p class="mb-4">Data da Sessão: {{ $screening->date }}</p>
+    
+    <form action="{{ route('tickets.purchase.post', ['movie' => $movie->id, 'screening' => $screening->id]) }}" method="POST">
         @csrf
         <label for="screening_id">Sessão:</label>
         <select name="screening_id" id="screening_id">
@@ -18,8 +22,9 @@
             @endforeach
         </select>
         <br>
-        <button type="submit">Comprar</button>
+        <button type="submit" class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
+            Comprar
+        </button>
     </form>
+</div>
 @endsection
-
-
