@@ -40,12 +40,13 @@ class TicketController extends Controller
             'price' => 10.00, // Set a default price or retrieve from the screening or seat
             'qrcode_url' => $this->generateQrCodeUrl(),
             'status' => 'pending', // Assuming default status is pending
+            'movie_name' => $movie->title, // Store movie name
+        'session_date' => $screening->date, // Store session date
+        'session_time' => $screening->start_time // Store session time
         ]);
 
         // Add movie details to the ticket for display purposes
-        $ticket->movie_name = $movie->title;
-        $ticket->session_date = $screening->date;
-        $ticket->session_time = $screening->start_time;
+        
 
         // Retrieve the cart from the session, or initialize a new collection if it doesn't exist
         $cart = collect(session('cart', []));
