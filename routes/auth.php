@@ -56,4 +56,12 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+
+
+    Route::get('/lista_movies', function () {
+                    return view('lista_movies');
+                })->name('lista_movies');
+
+    
+    Route::get('/movies', [MovieController::class, 'lista_movies']);
 });

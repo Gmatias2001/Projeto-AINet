@@ -16,16 +16,16 @@ class Screening extends Model
 
     public function ticketRef():HasMany
     {
-       return $this->hasMany(Ticket::class,'id','screening_id');
+       return $this->hasMany(Ticket::class,'screening_id','id'); //ORDEM CERTA
     }
 
     public function theaterRef():HasOne
     {
-       return $this->hasOne(Theater::class,'theater_id','id');
+       return $this->hasOne(Theater::class,'id','theater_id'); //ORDEM CERTA
     }
 
     public function movieRef():HasOne
     {
-       return $this->hasOne(Movie::class,'movie_id','id');
+       return $this->hasOne(Movie::class, 'id', 'movie_id'); //ORDEM CERTA
     }
 }
