@@ -51,7 +51,12 @@ class TicketController extends Controller
         $cart = collect(session('cart', []));
 
         // Check if the ticket is already in the cart
-        if ($cart->contains('id', $ticket->id)) {
+        $exists = $cart->contains(function ($cartItem) use ($ticket) {
+            return $cartItem->screening_id == $ticket->screening_id 
+                && $cartItem->seat_id == $ticket->seat_id;
+        });
+    
+        if ($exists) {
             $alertType = 'warning';
             $htmlMessage = "Ticket for movie <strong>\"{$ticket->movie_name}\"</strong> on <strong>{$ticket->session_date} at {$ticket->session_time}</strong> was not added to the cart because it is already there!";
         } else {

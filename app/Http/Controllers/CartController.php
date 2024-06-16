@@ -23,13 +23,32 @@ class CartController extends Controller
     }
 
     public function removeFromCart(Request $request, $ticketId)
-    {
-        $cart = $request->session()->get('cart', []);
-        $cart = array_diff($cart, [$ticketId]);
-        $request->session()->put('cart', $cart);
+{
+    // Retrieve the cart from the session
+    $cart = collect(session('cart', []));
 
-        return redirect()->route('cart.show')->with('success', 'Bilhete removido do carrinho com sucesso.');
+    // Find the index of the ticket to be removed
+    $ticketIndex = $cart->search(function ($ticket) use ($ticketId) {
+        return $ticket->id == $ticketId;
+    });
+
+    // If the ticket exists in the cart, remove it
+    if ($ticketIndex !== false) {
+        $cart->forget($ticketIndex);
+        $request->session()->put('cart', $cart);
+        $alertType = 'success';
+        $htmlMessage = "Ticket has been removed from your cart!";
+    } else {
+        // Set error message
+        $alertType = 'error';
+        $htmlMessage = 'Ticket not found in the cart.';
     }
+
+    // Redirect to cart page with a message
+    return redirect()->route('cart.show')->with('alert-msg', $htmlMessage)->with('alert-type', $alertType);
+}
+
+
 
 
     public function checkout(Request $request)
