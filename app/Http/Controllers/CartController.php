@@ -3,60 +3,151 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Ticket;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
+use App\Models\Purchase;
+use App\Services\Payment;
 
 class CartController extends Controller
 {
     public function showCart()
     {
-        // Retrieve cart data from session
         $cart = collect(session('cart', []));
-
         return view('cart.show', compact('cart'));
     }
 
     public function removeFromCart(Request $request, $ticketId)
     {
-        // Retrieve the cart from the session
         $cart = collect(session('cart', []));
 
-        // Find the index of the ticket to be removed
         $ticketIndex = $cart->search(function ($ticket) use ($ticketId) {
-            return $ticket->id == $ticketId;
+            return $ticket['id'] == $ticketId;
         });
 
-        // If the ticket exists in the cart, remove it
         if ($ticketIndex !== false) {
             $cart->forget($ticketIndex);
-            $request->session()->put('cart', $cart->values()->all()); // Reindex the array keys after removal
+            $request->session()->put('cart', $cart->values()->all());
             $alertType = 'success';
-            $htmlMessage = "Ticket has been removed from your cart!";
+            $alertMsg = 'Ticket removed from your cart.';
         } else {
-            // Set error message
             $alertType = 'error';
-            $htmlMessage = 'Ticket not found in the cart.';
+            $alertMsg = 'Ticket not found in the cart.';
         }
 
-        // Redirect to cart page with a message
-        return redirect()->route('cart.show')->with('alert-msg', $htmlMessage)->with('alert-type', $alertType);
+        return redirect()->route('cart.show')->with('alert-msg', $alertMsg)->with('alert-type', $alertType);
     }
 
-    public function checkout(Request $request)
+    public function showCheckoutForm(Request $request)
     {
-        // Logic for checkout here (can include payment processing, order creation, etc.)
+        $cart = collect(session('cart', []));
 
-        // Clear the cart after checkout
-        $request->session()->forget('cart');
+        if ($cart->isEmpty()) {
+            return redirect()->route('cart.show')->with('alert-msg', 'Your cart is empty.')->with('alert-type', 'error');
+        }
 
-        return redirect()->route('home')->with('success', 'Purchase completed successfully!');
+        $user = Auth::user();
+        $discount = $user ? config('settings.member_discount') : 0;
+
+        return view('checkout.form', compact('cart', 'user', 'discount'));
+    }
+
+    public function processCheckout(Request $request)
+    {
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'nif' => 'nullable|string|max:20',
+            'tipo_pagamento' => 'required|string|in:visa,paypal,mbway',
+        ]);
+
+        $tipoPagamento = $request->tipo_pagamento;
+
+        // Redireciona para o formulário específico com base no tipo de pagamento selecionado
+        switch ($tipoPagamento) {
+            case 'visa':
+                return redirect()->route('visa.form');
+            case 'paypal':
+                return redirect()->route('paypal.form');
+            case 'mbway':
+                return redirect()->route('mbway.form');
+            default:
+                // Caso nenhum método de pagamento válido seja selecionado, redireciona para o formulário de checkout padrão
+                return redirect()->route('checkout.form')->with('alert-msg', 'Selecione um método de pagamento válido.')->with('alert-type', 'error');
+        }
+    }
+
+    /**
+     * Exibe o formulário específico para pagamento Visa.
+     */
+    public function showVisaForm()
+    {
+        return view('visa.form');
+    }
+
+    /**
+     * Processa o formulário específico para pagamento Visa.
+     */
+    public function processVisa(Request $request)
+    {
+        $request->validate([
+            'card_number' => 'required|string|digits:16',
+            'cvc_code' => 'required|string|digits:3',
+        ]);
+
+        // Processamento específico do pagamento Visa
+
+        return redirect()->route('movies')->with('success', 'Pagamento Visa concluído com sucesso!');
+    }
+
+    /**
+     * Exibe o formulário específico para pagamento PayPal.
+     */
+    public function showPaypalForm()
+    {
+        return view('paypal.form');
+    }
+
+    /**
+     * Processa o formulário específico para pagamento PayPal.
+     */
+    public function processPaypal(Request $request)
+    {
+        $request->validate([
+            'paypal_email' => 'required|email|max:255',
+        ]);
+
+        // Processamento específico do pagamento PayPal
+
+        return redirect()->route('movies')->with('success', 'Pagamento PayPal concluído com sucesso!');
+    }
+
+    /**
+     * Exibe o formulário específico para pagamento MBWay.
+     */
+    public function showMbwayForm()
+    {
+        return view('mbway.form');
+    }
+
+    /**
+     * Processa o formulário específico para pagamento MBWay.
+     */
+    public function processMbway(Request $request)
+    {
+        $request->validate([
+            'mbway_number' => 'required|string|max:20',
+        ]);
+
+        // Processamento específico do pagamento MBWay
+
+        return redirect()->route('movies')->with('success', 'Pagamento MBWay concluído com sucesso!');
     }
 
     public function destroy(Request $request)
     {
-        $request->session()->forget('cart'); // Remove the 'cart' item from the session
+        $request->session()->forget('cart'); // Remove 'cart' session item
 
-        return redirect()->route('cart.show')
-            ->with('alert-msg', 'The cart has been cleared successfully!')
-            ->with('alert-type', 'success');
+        return redirect()->route('cart.show')->with('alert-msg', 'Cart cleared successfully!')->with('alert-type', 'success');
     }
 }

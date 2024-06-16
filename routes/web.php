@@ -35,6 +35,20 @@ Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::post('/cart', [CartController::class, 'confirm'])->name('cart.confirm');
 Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy');
 
+Route::get('/cart/checkout', [CartController::class, 'showCheckoutForm'])->name('checkout.form');
+Route::post('/cart/checkout', [CartController::class, 'processCheckout'])->name('checkout.process');
+
+Route::get('/cart/checkout', [CartController::class, 'showCheckoutForm'])->name('checkout.form');
+Route::post('/cart/checkout', [CartController::class, 'processCheckout'])->name('checkout.process');
+
+Route::get('/cart/checkout/visa', [CartController::class, 'visaForm'])->name('visa.form');
+Route::get('/cart/checkout/paypal', [CartController::class, 'paypalForm'])->name('paypal.form');
+Route::get('/cart/checkout/mbway', [CartController::class, 'mbwayForm'])->name('mbway.form');
+
+// Rotas para processar os pagamentos
+Route::post('/visa/process', [CartController::class, 'processVisa'])->name('visa.process');
+Route::post('/paypal/process', [CartController::class, 'processPaypal'])->name('paypal.process');
+Route::post('/mbway/process', [CartController::class, 'processMbway'])->name('mbway.process');
 
 
 

@@ -56,12 +56,12 @@ class TicketController extends Controller
     
         if ($exists) {
             $alertType = 'warning';
-            $htmlMessage = "Ticket for movie <strong>\"{$ticket->movie_name}\"</strong> on <strong>{$ticket->session_date} at {$ticket->session_time}</strong> was not added to the cart because it is already there!";
+            $htmlMessage = "Ticket for movie <strong>\"{$movie->title}\"</strong> on <strong>{$screening->date} at {$screening->start_time}</strong> was not added to the cart because it is already there!";
         } else {
             $cart->push($ticket);
             $request->session()->put('cart', $cart);
             $alertType = 'success';
-            $htmlMessage = "Ticket for movie <strong>\"{$ticket->movie_name}\"</strong> on <strong>{$ticket->session_date} at {$ticket->session_time}</strong> has been added to your cart!";
+            $htmlMessage = "Ticket for movie <strong>\"{$movie->title}\"</strong> on <strong>{$screening->date} at {$screening->start_time}</strong> has been added to your cart!";
         }
 
         // Redirect to cart page with a success message
