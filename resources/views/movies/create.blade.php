@@ -8,7 +8,7 @@
 </head>
 <body>
     <h2>New Movie</h2>
-    <form method="POST" action="{{ route('movies.store') }}">
+    <form method="POST" action="/movies">
         @csrf
         <div>
             <label for="title">Title</label>

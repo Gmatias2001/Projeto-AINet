@@ -34,10 +34,8 @@ Route::get('/tickets/success/{ticket}', [TicketController::class, 'showSuccessPa
 
 
 
-Route::get('/movies', [MovieController::class, 'store'])->name('movies.index');
 
-Route::get('/movieslist/create', [MovieController::class, 'create'])->name('movies.create'); 
-
+Route::get('/movieslist/create', [MovieController::class, 'create'])->name('movies.create');
 Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
 
 

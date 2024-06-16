@@ -43,7 +43,7 @@ class MovieController extends Controller
     public function store(Request $request): RedirectResponse 
     { 
         Movie::create($request->all()); 
-        return redirect()->route('movies.store');
+        return redirect('/movies');
 
     }
     
