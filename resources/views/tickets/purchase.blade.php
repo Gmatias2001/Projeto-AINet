@@ -12,9 +12,11 @@
         <label for="screening_id">Sessão:</label>
         <select name="screening_id" id="screening_id">
             @foreach ($screenings as $screeningOption)
-                <option value="{{ $screeningOption->id }}" {{ $screeningOption->id == $screening->id ? 'selected' : '' }}>
-                    {{ $screeningOption->start_time }}
-                </option>
+                @if ($screeningOption->date == $screening->date)
+                    <option value="{{ $screeningOption->id }}" {{ $screeningOption->id == $screening->id ? 'selected' : '' }}>
+                        {{ $screeningOption->start_time }}
+                    </option>
+                @endif
             @endforeach
         </select>
         <br>

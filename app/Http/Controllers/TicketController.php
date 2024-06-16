@@ -32,6 +32,8 @@ class TicketController extends Controller
         $screening = Screening::findOrFail($screeningId);
         $seat = Seat::findOrFail($request->seat_id);
 
+
+        
         // Cria o ticket com base nos dados fornecidos
         $ticket = Ticket::create([
             'screening_id' => $screening->id,
@@ -45,16 +47,24 @@ class TicketController extends Controller
             'session_time' => $screening->start_time,
         ]);
 
-        // Adiciona o ticket ao carrinho na sessão
-        $cart = collect(Session::get('cart', []));
-        $cart->push($ticket);
-        Session::put('cart', $cart);
+        $cart = collect(session('cart', []));
 
-        // Mensagem de sucesso
-        $alertType = 'success';
-        $htmlMessage = "Ticket para o filme <strong>\"{$movie->title}\"</strong> em <strong>{$screening->date} às {$screening->start_time}</strong> foi adicionado ao seu carrinho.Assento: Fila {$seat->row}, Assento {$seat->seat_number}";
+        $exists = $cart->contains(function ($cartItem) use ($ticket) {
+            return $cartItem->screening_id == $ticket->screening_id 
+                && $cartItem->seat_id == $ticket->seat_id;
+        });
+    
+        if ($exists) {
+            $alertType = 'warning';
+            $htmlMessage = "Ticket for movie <strong>\"{$ticket->movie_name}\"</strong> on <strong>{$ticket->session_date} at {$ticket->session_time}</strong> was not added to the cart because it is already there!";
+        } else {
+            $cart->push($ticket);
+            $request->session()->put('cart', $cart);
+            $alertType = 'success';
+            $htmlMessage = "Ticket for movie <strong>\"{$ticket->movie_name}\"</strong> on <strong>{$ticket->session_date} at {$ticket->session_time}</strong> has been added to your cart!";
+        }
 
-        // Redireciona para a página de carrinho com a mensagem de alerta
+        // Redirect to cart page with a success message
         return redirect()->route('cart.show')->with('alert-msg', $htmlMessage)->with('alert-type', $alertType);
     }
 
