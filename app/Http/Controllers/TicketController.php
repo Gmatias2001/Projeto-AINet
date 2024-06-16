@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Screening;
-use App\Models\Seat;
 use App\Models\Ticket;
 use App\Models\Movie;
+use App\Models\Screening;
+use App\Models\Seat;
+use Illuminate\Support\Facades\Session;
 
 class TicketController extends Controller
 {
@@ -15,68 +16,51 @@ class TicketController extends Controller
         $movie = Movie::findOrFail($movieId);
         $screening = Screening::where('movie_id', $movieId)->where('date', $date)->firstOrFail();
         $seats = Seat::all();
-        $screenings = Screening::where('movie_id', $movieId)->get(); // Adicione esta linha para obter todas as sessões disponíveis
+        $screenings = Screening::where('movie_id', $movieId)->get();
 
         return view('tickets.purchase', compact('movie', 'screening', 'seats', 'screenings'));
     }
 
     public function purchaseTicket(Request $request, $movieId, $screeningId)
     {
-        // Validate the form data
         $request->validate([
             'screening_id' => 'required|exists:screenings,id',
             'seat_id' => 'required|exists:seats,id',
         ]);
 
-        // Retrieve movie and screening details for the ticket
         $movie = Movie::findOrFail($movieId);
         $screening = Screening::findOrFail($screeningId);
+        $seat = Seat::findOrFail($request->seat_id);
 
-        // Create a new Ticket instance using the create method
+        // Cria o ticket com base nos dados fornecidos
         $ticket = Ticket::create([
             'screening_id' => $screening->id,
-            'seat_id' => $request->seat_id,
-            'purchase_id' => null, // Assuming a purchase will be created later
-            'price' => 10.00, // Set a default price or retrieve from the screening or seat
+            'seat_id' => $seat->id,
+            'purchase_id' => null,
+            'price' => $screening->ticket_price, // Supondo que o preço do ingresso seja obtido da sessão de cinema
             'qrcode_url' => $this->generateQrCodeUrl(),
-            'status' => 'pending', // Assuming default status is pending
-            'movie_name' => $movie->title, // Store movie name
-            'session_date' => $screening->date, // Store session date
-            'session_time' => $screening->start_time // Store session time
+            'status' => 'pending',
+            'movie_name' => $movie->title,
+            'session_date' => $screening->date,
+            'session_time' => $screening->start_time,
         ]);
 
-        // Add movie details to the ticket for display purposes
-        
+        // Adiciona o ticket ao carrinho na sessão
+        $cart = collect(Session::get('cart', []));
+        $cart->push($ticket);
+        Session::put('cart', $cart);
 
-        // Retrieve the cart from the session, or initialize a new collection if it doesn't exist
-        $cart = collect(session('cart', []));
+        // Mensagem de sucesso
+        $alertType = 'success';
+        $htmlMessage = "Ticket para o filme <strong>\"{$movie->title}\"</strong> em <strong>{$screening->date} às {$screening->start_time}</strong> foi adicionado ao seu carrinho.Assento: Fila {$seat->row}, Assento {$seat->seat_number}";
 
-        // Check if the ticket is already in the cart
-        $exists = $cart->contains(function ($cartItem) use ($ticket) {
-            return $cartItem->screening_id == $ticket->screening_id 
-                && $cartItem->seat_id == $ticket->seat_id;
-        });
-    
-        if ($exists) {
-            $alertType = 'warning';
-            $htmlMessage = "Ticket for movie <strong>\"{$ticket->movie_name}\"</strong> on <strong>{$ticket->session_date} at {$ticket->session_time}</strong> was not added to the cart because it is already there!";
-        } else {
-            $cart->push($ticket);
-            $request->session()->put('cart', $cart);
-            $alertType = 'success';
-            $htmlMessage = "Ticket for movie <strong>\"{$ticket->movie_name}\"</strong> on <strong>{$ticket->session_date} at {$ticket->session_time}</strong> has been added to your cart!";
-        }
-
-        // Redirect to cart page with a success message
+        // Redireciona para a página de carrinho com a mensagem de alerta
         return redirect()->route('cart.show')->with('alert-msg', $htmlMessage)->with('alert-type', $alertType);
     }
-
 
     private function generateQrCodeUrl()
     {
         // Implemente a lógica de geração do QR code aqui
         return 'generated_qr_code_url';
     }
-
-
 }

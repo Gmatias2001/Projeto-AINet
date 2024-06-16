@@ -24,7 +24,7 @@ class Screening extends Model
        return $this->hasOne(Theater::class,'id','theater_id'); //ORDEM CERTA
     }
 
-    public function movieRef():HasOne
+    public function movie():HasOne
     {
        return $this->hasOne(Movie::class, 'id', 'movie_id'); //ORDEM CERTA
     }

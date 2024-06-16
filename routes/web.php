@@ -33,6 +33,7 @@ Route::delete('/cart/{ticket}', [CartController::class, 'removeFromCart'])->name
 Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::post('/cart', [CartController::class, 'confirm'])->name('cart.confirm');
+Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy');
 
 
 

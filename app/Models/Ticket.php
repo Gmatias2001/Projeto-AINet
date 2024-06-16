@@ -11,7 +11,7 @@ class Ticket extends Model
     use HasFactory;
 
     protected $fillable = [
-        'screening_id', 'seat_id', 'purchase_id', 'price', 'qrcode_url', 'status', 'movie_name', 'session_date', 'session_time'
+        'screening_id', 'seat_id', 'purchase_id', 'price', 'qrcode_url', 'status'
     ];
 
     /**

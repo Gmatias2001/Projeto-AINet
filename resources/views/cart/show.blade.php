@@ -17,31 +17,40 @@
         <thead>
             <tr>
                 <th class="py-2">Filme</th>
+                <th class="py-2">Assento</th>
                 <th class="py-2">Data</th>
                 <th class="py-2">Hora</th>
                 <th class="py-2">QR Code</th>
+                <th class="py-2">Ação</th> <!-- Adicionei uma coluna para a ação -->
             </tr>
         </thead>
         <tbody>
             @foreach ($cart as $item)
             <tr>
-                <td class="py-2">{{ $item->movie_name }}</td>
-                <td class="py-2">{{ $item->session_date }}</td>
-                <td class="py-2">{{ $item->session_time }}</td>
-                <td class="py-2">
-                    <img src="{{ $item->qr_code_url }}" alt="QR Code">
-                </td>
-                <td class="py-2">
+                <th class="py-2">{{ $item->screening->movie->title }}</th> <!-- Ajuste para acessar os relacionamentos -->
+                <th class="py-2">Fila {{ $item->seat->row }}, Assento {{ $item->seat->seat_number }}</th> <!-- Mostra o assento -->
+                <th class="py-2">{{ $item->screening->date }}</th> <!-- Ajuste para acessar os relacionamentos -->
+                <th class="py-2">{{ $item->screening->start_time }}</th> <!-- Ajuste para acessar os relacionamentos -->
+                <th class="py-2">
+                    <img src="{{ $item->qrcode_url }}" alt="QR Code">
+                </th>
+                <th class="py-2">
                     <form action="{{ route('cart.remove', $item->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Remover</button>
                     </form>
-                </td>
+                </th>
             </tr>
             @endforeach
         </tbody>
     </table>
+    <!-- Formulário para limpar todo o carrinho -->
+    <form action="{{ route('cart.destroy') }}" method="post">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger mt-4">Limpar Carrinho</button>
+    </form>
     @endif
 </div>
 @endsection
