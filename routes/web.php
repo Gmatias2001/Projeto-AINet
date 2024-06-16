@@ -41,7 +41,12 @@ Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy');
 
 
 Route::get('movieslist/create', [MovieController::class, 'create']); 
+ 
+Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
+Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 
+Route::get('movieslist/{id}/edit', [MovieController::class, 'edit'])->name('movies.edit');
+Route::put('movieslist/{id}', [MovieController::class, 'update'])->name('movies.update');
 
 require __DIR__.'/auth.php';
 

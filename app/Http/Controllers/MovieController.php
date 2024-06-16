@@ -41,25 +41,59 @@ class MovieController extends Controller
 
 
     public function store(Request $request): RedirectResponse 
-    { 
-        Movie::create($request->all()); 
-        return redirect('/movies'); 
-        
-        
+{ 
+    $validatedData = $request->validate([
+        'title' => 'required|string|max:255',
+        'genre_code' => 'required|string|max:255',
+        'year' => 'required|integer',
+        'trailer_url' => 'nullable|url',
+        'synopsis' => 'required|string',
+        'poster_filename' => 'nullable|file|mimes:jpg,jpeg,png',
+    ]);
+
+     //Handle the file upload if there's any
+    if ($request->hasFile('poster_filename')) {
+        $validatedData['poster_filename'] = $request->file('poster_filename')->store('posters', 'public');
     }
+
+   Movie::create($validatedData); 
+    return redirect()->route('movies.index')->with('success', 'Movie added successfully');
+}
     
     
 
 
 
-    public function edit(Movie $movie)
-    {
-    }
+public function edit(Movie $movie): View
+{
+    return view('movies.edit')->with('movie', $movie);
+}
 
 
-    public function update(Request $request, Movie $movie)
-    {
+public function update(Request $request, Movie $movie): RedirectResponse
+{
+    $validatedData = $request->validate([
+        'title' => 'required|string|max:255',
+        'genre_code' => 'required|string',
+        'year' => 'required|integer|min:1888|max:' . date('Y'),
+        'trailer_url' => 'nullable|url',
+        'synopsis' => 'required|string',
+        'poster_filename' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    if ($request->hasFile('poster_filename')) {
+        $file = $request->file('poster_filename');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('posters'), $filename);
+        $validatedData['poster_filename'] = $filename;
     }
+
+    $movie->update($validatedData);
+    return redirect('/movies');
+}
+
+
+   
 
 
     public function destroy(Movie $movie)
