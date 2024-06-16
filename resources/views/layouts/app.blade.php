@@ -32,13 +32,15 @@
                         href="/movieslist">
                         Movies
                     </a>
-                   
+
                     <a href="{{ route('cart.show') }}"
                         class="text-indigo-400 no-underline hover:no-underline font-bold text-2xl inline-block hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">
                         Carrinho
-                        @if (session('cart'))
-                        <span
-                            class="ml-1 text-white bg-red-500 px-2 py-1 rounded-full">{{ count(session('cart')) }}</span>
+                        @php
+                        $cartCount = count(session('cart', []));
+                        @endphp
+                        @if ($cartCount > 0)
+                        <span class="ml-1 text-white bg-red-500 px-2 py-1 rounded-full">{{ $cartCount }}</span>
                         @endif
                     </a>
 
