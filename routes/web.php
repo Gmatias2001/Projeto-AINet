@@ -46,16 +46,24 @@ Route::middleware(['web'])->group(function () {
 });
 
 Route::get('movieslist/create', [MovieController::class, 'create'])->name('movies.create'); ;
- 
+
 Route::post('/movieslist', [MovieController::class, 'store'])->name('movies.store');
+<<<<<<< Updated upstream
 Route::get('/movieslist', [MovieController::class, 'list'])->name('movies.index');
 Route::get('/', [MovieController::class, 'index'])->name('home');
 Route::get('movieslist/{id}/edit', [MovieController::class, 'edit'])->name('movies.edit');
 Route::put('movieslist/{id}', [MovieController::class, 'update'])->name('movies.update');
+=======
+Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+
+Route::resource('movies', MovieController::class)->except(['show']);
+//Route::get('movieslist/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');
+Route::put('movies/{movie}/edit', [MovieController::class, 'update'])->name('movies.update');
+>>>>>>> Stashed changes
 
 Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
 
-Route::get('movies/{movie}', [MovieController::class, 'show'])->name('movies.show'); 
+Route::get('movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
 
 
 
