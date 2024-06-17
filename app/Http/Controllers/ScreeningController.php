@@ -41,9 +41,7 @@ class ScreeningController extends Controller
         $sort = $request->query('sort', 'id');
         $direction = $request->query('direction', 'asc');
 
-        $screenings = Screening::with(['movie', 'theater'])
-            ->orderBy($sort, $direction)
-            ->get();
+        $screenings = Screening::paginate(20);
 
         return view('screenings.index', compact('screenings', 'sort', 'direction'));
     }
