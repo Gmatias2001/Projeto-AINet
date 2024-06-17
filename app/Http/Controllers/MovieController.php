@@ -19,10 +19,10 @@ class MovieController extends Controller
         $synopsis = $request->query('synopsis');
         $sort = $request->query('sort', 'id');  // Ordenar por 'id' por padrão
         $direction = $request->query('direction', 'asc');  // Ordenar por 'asc' por padrão
-        
+
         // Obter IDs distintos de filmes em exibição
         $screeningMovies = Screening::distinct()->pluck('movie_id');
-        
+
         // Construir a query para os filmes
         $query = Movie::whereIn('id', $screeningMovies);
 
@@ -57,19 +57,19 @@ class MovieController extends Controller
     {
         $sort = $request->query('sort', 'id');
         $direction = $request->query('direction', 'asc');
-        
+
         $query = Movie::orderBy($sort, $direction);
-        
+
         $movies = $query->paginate(20);
 
         return view('lista', ['movies' => $movies]);
     }
 
-    public function show(Movie $movie): View     
-    {         
-        return view('movies.show')->with('movie', $movie);     
-    } 
-    
+    public function show(Movie $movie): View
+    {
+        return view('movies.show')->with('movie', $movie);
+    }
+
 
     public function details(string $id): View
     {
@@ -91,27 +91,26 @@ class MovieController extends Controller
     }
 
 
-    public function store(Request $request): RedirectResponse 
-{ 
-    Movie::create($request->all());
-    return redirect('/movieslist');
+    public function store(Request $request): RedirectResponse
+    {
+        Movie::create($request->all());
+        return redirect('/movieslist');
 
 
-    if ($request->hasFile('poster_filename')) {
-        $validatedData['poster_filename'] = $request->file('poster_filename')->store('posters', 'public');
+        if ($request->hasFile('poster_filename')) {
+            $validatedData['poster_filename'] = $request->file('poster_filename')->store('posters', 'public');
+        }
     }
 
-}
-
-public function edit(Movie $movie): View
-{
-    return view('movies.edit')->with('movie', $movie);
-}
+    public function edit(Movie $movie): View
+    {
+        return view('movies.edit')->with('movie', $movie);
+    }
 
 
-public function update(MovieFormRequest $request, Movie $movie): RedirectResponse
-{
-    $movie->update($request->validated());
+    public function update(MovieFormRequest $request, Movie $movie): RedirectResponse
+    {
+        $movie->update($request->validated());
 
         if ($request->hasFile('poster_filename')) {
             if ($movie->imageExists) {
@@ -125,41 +124,25 @@ public function update(MovieFormRequest $request, Movie $movie): RedirectRespons
         return redirect()->route('movies.show')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
-}
-
-
-
+    }
 
 
     public function destroy(Movie $movie): RedirectResponse
     {
         $movie->delete();
         return redirect('/movieslist');
-
-
-    }
-
-<<<<<<< Updated upstream
-    
-=======
-    public function show(Movie $movie): View
-    {
-        return view('movies.show')->with('movie', $movie);
     }
 
     public function search(Request $request)
-{
-    $query = $request->input('query');
+    {
+        $query = $request->input('query');
 
-    // Perform search logic, for example:
-    $movies = Movie::where('title', 'like', '%' . $query . '%')->get();
+        // Perform search logic, for example:
+        $movies = Movie::where('title', 'like', '%' . $query . '%')->get();
 
-    return view('movies.index', [
-        'movies' => $movies,
-        'query' => $query, // Pass query to re-populate search field if needed
-    ]);
-}
->>>>>>> Stashed changes
-
-
+        return view('movies.index', [
+            'movies' => $movies,
+            'query' => $query, // Pass query to re-populate search field if needed
+        ]);
+    }
 }
