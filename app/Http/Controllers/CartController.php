@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use App\Models\Purchase;
-use App\Services\Payment;
+use App\Services\Payment; // Importando a classe Payment corretamente
 
 class CartController extends Controller
 {
@@ -47,7 +47,7 @@ class CartController extends Controller
         }
 
         $user = Auth::user();
-        $discount = $user ? config('settings.member_discount') : 0;
+        $discount = $user ? 0.1 : 0; // Desconto de 10% para usuários logados
 
         return view('checkout.form', compact('cart', 'user', 'discount'));
     }
@@ -59,95 +59,75 @@ class CartController extends Controller
             'email' => 'required|email|max:255',
             'nif' => 'nullable|string|max:20',
             'tipo_pagamento' => 'required|string|in:visa,paypal,mbway',
+            'ref_pagamento' => 'required|string',
+            'cvc_code' => 'required_if:tipo_pagamento,visa|string|digits:3',
         ]);
 
         $tipoPagamento = $request->tipo_pagamento;
+        $refPagamento = $request->ref_pagamento;
 
-        // Redireciona para o formulário específico com base no tipo de pagamento selecionado
         switch ($tipoPagamento) {
             case 'visa':
-                return redirect()->route('visa.form');
+                $paymentValid = Payment::payWithVisa($refPagamento, $request->cvc_code);
+                break;
             case 'paypal':
-                return redirect()->route('paypal.form');
+                $paymentValid = Payment::payWithPaypal($refPagamento);
+                break;
             case 'mbway':
-                return redirect()->route('mbway.form');
+                $paymentValid = Payment::payWithMBway($refPagamento);
+                break;
             default:
-                // Caso nenhum método de pagamento válido seja selecionado, redireciona para o formulário de checkout padrão
-                return redirect()->route('checkout.form')->with('alert-msg', 'Selecione um método de pagamento válido.')->with('alert-type', 'error');
+                $paymentValid = false;
         }
+
+        if (!$paymentValid) {
+            return redirect()->route('checkout.form')->with('alert-msg', 'Pagamento inválido. Verifique os dados e tente novamente.')->with('alert-type', 'error');
+        }
+
+        $purchase = $this->savePurchaseDetails($request, $tipoPagamento);
+
+        if (!$purchase) {
+            return redirect()->route('checkout.form')->with('alert-msg', 'Erro ao processar a compra. Tente novamente mais tarde.')->with('alert-type', 'error');
+        }
+
+        session()->forget('cart');
+
+        return redirect()->route('home')->with('success', 'Compra realizada com sucesso!');
     }
 
-    /**
-     * Exibe o formulário específico para pagamento Visa.
-     */
-    public function showVisaForm()
+    private function savePurchaseDetails(Request $request, $paymentMethod)
     {
-        return view('visa.form');
-    }
+        $cart = collect(session('cart', []));
+        $user = Auth::user();
+        $ticket_price = 9.0;
+        $total = count($cart) * $ticket_price;
 
-    /**
-     * Processa o formulário específico para pagamento Visa.
-     */
-    public function processVisa(Request $request)
-    {
-        $request->validate([
-            'card_number' => 'required|string|digits:16',
-            'cvc_code' => 'required|string|digits:3',
+        if ($user) {
+            $total *= 0.9; // Aplicar 10% de desconto se o usuário estiver logado
+        }
+
+        // Criar um novo registro de compra
+        $purchase = Purchase::create([
+            'customer_id' => $user ? $user->id : null,
+            'date' => Carbon::now(),
+            'total_price' => $total,
+            'customer_name' => $user ? $user->name : $request->nome,
+            'customer_email' => $user ? $user->email : $request->email,
+            'nif' => $request->nif,
+            'payment_type' => $paymentMethod,
+            'payment_ref' => $request->ref_pagamento, // Usando a mesma referência para todos os tipos de pagamento
+            'receipt_pdf_filename' => null, // Adicionar lógica para gerar o recibo em PDF, se necessário
         ]);
 
-        // Processamento específico do pagamento Visa
+        // Adicionar tickets relacionados à compra
+        foreach ($cart as $item) {
+            $purchase->ticketRef()->create([
+                'screening_id' => $item['screening_id'],
+                'seat_id' => $item['seat_id'],
+                'price' => $ticket_price,
+            ]);
+        }
 
-        return redirect()->route('movies')->with('success', 'Pagamento Visa concluído com sucesso!');
-    }
-
-    /**
-     * Exibe o formulário específico para pagamento PayPal.
-     */
-    public function showPaypalForm()
-    {
-        return view('paypal.form');
-    }
-
-    /**
-     * Processa o formulário específico para pagamento PayPal.
-     */
-    public function processPaypal(Request $request)
-    {
-        $request->validate([
-            'paypal_email' => 'required|email|max:255',
-        ]);
-
-        // Processamento específico do pagamento PayPal
-
-        return redirect()->route('movies')->with('success', 'Pagamento PayPal concluído com sucesso!');
-    }
-
-    /**
-     * Exibe o formulário específico para pagamento MBWay.
-     */
-    public function showMbwayForm()
-    {
-        return view('mbway.form');
-    }
-
-    /**
-     * Processa o formulário específico para pagamento MBWay.
-     */
-    public function processMbway(Request $request)
-    {
-        $request->validate([
-            'mbway_number' => 'required|string|max:20',
-        ]);
-
-        // Processamento específico do pagamento MBWay
-
-        return redirect()->route('movies')->with('success', 'Pagamento MBWay concluído com sucesso!');
-    }
-
-    public function destroy(Request $request)
-    {
-        $request->session()->forget('cart'); // Remove 'cart' session item
-
-        return redirect()->route('cart.show')->with('alert-msg', 'Cart cleared successfully!')->with('alert-type', 'success');
+        return $purchase;
     }
 }
