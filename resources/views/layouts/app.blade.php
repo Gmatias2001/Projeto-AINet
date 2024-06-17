@@ -26,7 +26,8 @@
                     <a class="flex  text-indigo-400 font-bold text-4xl" href="/">
                         Cine<span
                             class="h-16 bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Magic</span>
-                    </a>
+                            <a href="{{ route('screenings.index') }}" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">Manage Screenings</a>
+                        </a>
                     <!-- botao lista filmes -->
                     <a class="items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl inline-block  hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                         href="/movieslist">

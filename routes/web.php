@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ScreeningController;
 
 // REPLACE THIS
 // Route::get('/', function () {
@@ -69,6 +70,14 @@ Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movi
 
 Route::get('movies/{movie}', [MovieController::class, 'show'])->name('movies.show'); 
 
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('screenings', [ScreeningController::class, 'index'])->name('screenings.index');
+    Route::get('screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
+    Route::post('screenings', [ScreeningController::class, 'store'])->name('screenings.store');
+});
 
 
 require __DIR__.'/auth.php';

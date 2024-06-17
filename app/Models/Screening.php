@@ -5,27 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Screening extends Model
 {
     use HasFactory;
 
-    protected $fillable =['movie_id','theater_id','date','start_time'];
+    protected $fillable = ['movie_id', 'theater_id', 'date', 'start_time'];
 
-    public function ticketRef():HasMany
+    public function ticketRef(): HasMany
     {
-       return $this->hasMany(Ticket::class,'screening_id','id'); //ORDEM CERTA
+        return $this->hasMany(Ticket::class, 'screening_id', 'id');
     }
 
-    public function theaterRef():HasOne
+    public function theater(): BelongsTo
     {
-       return $this->hasOne(Theater::class,'id','theater_id'); //ORDEM CERTA
+        return $this->belongsTo(Theater::class, 'theater_id', 'id');
     }
 
-    public function movie():HasOne
+    public function movie(): BelongsTo
     {
-       return $this->hasOne(Movie::class, 'id', 'movie_id'); //ORDEM CERTA
+        return $this->belongsTo(Movie::class, 'movie_id', 'id');
     }
 }
