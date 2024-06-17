@@ -21,7 +21,7 @@
 
         <div class="mb-4">
             <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" value="{{ $user ? $user->name : '' }}" required>
+            <input type="text" id="nome" name="nome"value="{{ $user ? $user->name : '' }}" required>
         </div>
 
         <div class="mb-4">
@@ -45,7 +45,7 @@
 
         <div id="payment_fields" class="payment-fields mb-4" style="display: none;">
             <label for="ref_pagamento">Referência de Pagamento:</label>
-            <input type="text" id="ref_pagamento" name="ref_pagamento" maxlength="16" required>
+            <input type="text" id="ref_pagamento" name="ref_pagamento" maxlength="255" required>
         </div>
 
         <div id="cvc_field" class="mb-4" style="display: none;">

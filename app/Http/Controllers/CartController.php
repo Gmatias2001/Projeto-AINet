@@ -96,38 +96,55 @@ class CartController extends Controller
     }
 
     private function savePurchaseDetails(Request $request, $paymentMethod)
-    {
-        $cart = collect(session('cart', []));
-        $user = Auth::user();
-        $ticket_price = 9.0;
-        $total = count($cart) * $ticket_price;
-
-        if ($user) {
-            $total *= 0.9; // Aplicar 10% de desconto se o usuário estiver logado
+        {
+            $cart = collect(session('cart', []));
+            $ticket_price = 9.0;
+            $total = count($cart) * $ticket_price;
+        
+            // Obtém o usuário autenticado (se houver)
+            $user = Auth::user();
+        
+            // Criar um novo registro de compra
+            $purchaseData = [
+                'date' => Carbon::now(),
+                'total_price' => $total,
+                'payment_type' => $paymentMethod,
+                'payment_ref' => $request->ref_pagamento, // Usando a mesma referência para todos os tipos de pagamento
+                'receipt_pdf_filename' => null, // Adicionar lógica para gerar o recibo em PDF, se necessário
+            ];
+        
+            // Se o usuário estiver autenticado, associar informações adicionais do usuário
+            if ($user) {
+                $purchaseData['customer_id'] = $user->id;
+                $purchaseData['customer_name'] = $user->name;
+                $purchaseData['customer_email'] = $user->email;
+            } else {
+                // Se não estiver autenticado, usar informações fornecidas no formulário
+                $purchaseData['customer_name'] = $request->nome;
+                $purchaseData['customer_email'] = $request->email;
+                $purchaseData['nif'] = $request->nif;
+            }
+        
+            // Criar um novo registro de compra
+            $purchase = Purchase::create($purchaseData);
+        
+            // Adicionar tickets relacionados à compra
+            foreach ($cart as $item) {
+                $purchase->ticketRef()->create([
+                    'screening_id' => $item['screening_id'],
+                    'seat_id' => $item['seat_id'],
+                    'price' => $ticket_price,
+                ]);
+            }
+        
+            return $purchase;
         }
 
-        // Criar um novo registro de compra
-        $purchase = Purchase::create([
-            'customer_id' => $user ? $user->id : null,
-            'date' => Carbon::now(),
-            'total_price' => $total,
-            'customer_name' => $user ? $user->name : $request->nome,
-            'customer_email' => $user ? $user->email : $request->email,
-            'nif' => $request->nif,
-            'payment_type' => $paymentMethod,
-            'payment_ref' => $request->ref_pagamento, // Usando a mesma referência para todos os tipos de pagamento
-            'receipt_pdf_filename' => null, // Adicionar lógica para gerar o recibo em PDF, se necessário
-        ]);
+        public function destroy(Request $request)
+        {
+            $request->session()->forget('cart'); // Remove 'cart' session item
+            
+            return redirect()->route('cart.show')->with('alert-msg', 'Cart cleared successfully!')->with('alert-type', 'success');
 
-        // Adicionar tickets relacionados à compra
-        foreach ($cart as $item) {
-            $purchase->ticketRef()->create([
-                'screening_id' => $item['screening_id'],
-                'seat_id' => $item['seat_id'],
-                'price' => $ticket_price,
-            ]);
         }
-
-        return $purchase;
-    }
 }
