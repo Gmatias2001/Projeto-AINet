@@ -47,6 +47,18 @@
                             </a>
                         </th>
                         <th class="py-2 px-4 border-b border-purple-200">
+                            <a href="{{ route('screenings.index', array_merge(request()->query(), ['sort' => 'date', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}">
+                                Date
+                                @if(request('sort') === 'date')
+                                    @if(request('direction') === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                @endif
+                            </a>
+                        </th>
+                        <th class="py-2 px-4 border-b border-purple-200">
                             <a href="{{ route('screenings.index', array_merge(request()->query(), ['sort' => 'start_time', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}">
                                 Screening Time
                                 @if(request('sort') === 'start_time')
@@ -58,6 +70,7 @@
                                 @endif
                             </a>
                         </th>
+                        <th class="py-2 px-4 border-b border-purple-200">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,7 +79,15 @@
                             <td class="py-2 px-4 border-b border-purple-200">{{ $screening->id }}</td>
                             <td class="py-2 px-4 border-b border-purple-200">{{ $screening->movie->title }}</td>
                             <td class="py-2 px-4 border-b border-purple-200">{{ $screening->theater->name }}</td>
+                            <td class="py-2 px-4 border-b border-purple-200">{{ $screening->date }}</td>
                             <td class="py-2 px-4 border-b border-purple-200">{{ $screening->start_time }}</td>
+                            <td class="py-2 px-4 border-b border-purple-200">
+                                <form method="POST" action="{{ route('screenings.destroy', $screening->id) }}" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

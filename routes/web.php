@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
     Route::get('screenings', [ScreeningController::class, 'index'])->name('screenings.index');
     Route::get('screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
     Route::post('screenings', [ScreeningController::class, 'store'])->name('screenings.store');
+    Route::delete('screenings/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
 });
 
 
