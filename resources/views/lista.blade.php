@@ -3,15 +3,48 @@
 @section('content')
     <div class="container mx-auto mt-8">
         <div class="flex justify-end mb-4">
-            <a href="movieslist/create" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">Add New Film</a>
+            <a href="/movieslist/create" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">Add New Film</a>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full bg-purple-100 border border-purple-200">
                 <thead>
                     <tr class="bg-purple-300">
-                        <th class="py-2 px-4 border-b border-purple-200">ID</th>
-                        <th class="py-2 px-4 border-b border-purple-200">Title</th>
-                        <th class="py-2 px-4 border-b border-purple-200">Genre Code</th>
+                        <th class="py-2 px-4 border-b border-purple-200">
+                            <a href="{{ route('movies.index', array_merge(request()->query(), ['sort' => 'id', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}">
+                                ID
+                                @if(request('sort') === 'id')
+                                    @if(request('direction') === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                @endif
+                            </a>
+                        </th>
+                        <th class="py-2 px-4 border-b border-purple-200">
+                            <a href="{{ route('movies.index', array_merge(request()->query(), ['sort' => 'title', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}">
+                                Title
+                                @if(request('sort') === 'title')
+                                    @if(request('direction') === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                @endif
+                            </a>
+                        </th>
+                        <th class="py-2 px-4 border-b border-purple-200">
+                            <a href="{{ route('movies.index', array_merge(request()->query(), ['sort' => 'genre_code', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}">
+                                Genre Code
+                                @if(request('sort') === 'genre_code')
+                                    @if(request('direction') === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                @endif
+                            </a>
+                        </th>
                         <th class="py-2 px-4 border-b border-purple-200">Actions</th>
                     </tr>
                 </thead>
@@ -23,7 +56,7 @@
                             <td class="py-2 px-4 border-b border-purple-200">{{ $movie->genre_code }}</td>
                             <td class="py-2 px-4 border-b border-purple-200 flex space-x-2">
                                 <a href="/movieslist/{{ $movie->id }}/edit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Update</a>
-                                <a href="{{ route('movies.show', ['movie' => $movie]) }}">View</a> 
+                                <a href="{{ route('movies.show', ['movie' => $movie]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">View</a> 
                                 <form method="POST" action="{{ route('movies.destroy', ['movie' => $movie]) }}" class="inline">
                                     @csrf
                                     @method('DELETE')
@@ -36,7 +69,7 @@
             </table>
         </div>
         <div class="mt-4">
-            {{ $movies->links() }}
+            {{ $movies->appends(request()->query())->links() }}
         </div>
     </div>
 @endsection

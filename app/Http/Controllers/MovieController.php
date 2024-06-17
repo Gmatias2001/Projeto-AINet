@@ -10,15 +10,59 @@ use Illuminate\Http\RedirectResponse;
 
 class MovieController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        //$allMovies = Movie::all();
-        //$screeningMovies = Screening::paginate(24);
+        $genre = $request->query('genre');
+        $title = $request->query('title');
+        $synopsis = $request->query('synopsis');
+        $sort = $request->query('sort', 'id');  // Ordenar por 'id' por padrão
+        $direction = $request->query('direction', 'asc');  // Ordenar por 'asc' por padrão
+        
+        // Obter IDs distintos de filmes em exibição
         $screeningMovies = Screening::distinct()->pluck('movie_id');
-        $Movies = Movie::whereIn('id', $screeningMovies)->paginate(20);
+        
+        // Construir a query para os filmes
+        $query = Movie::whereIn('id', $screeningMovies);
 
-        return view('index', ['movies' => $Movies]);
+        // Filtrar por gênero se fornecido
+        if ($genre) {
+            $query->where('genre_code', $genre);
+        }
+
+        // Filtrar por título se fornecido
+        if ($title) {
+            $query->where('title', 'LIKE', '%' . $title . '%');
+        }
+
+        // Filtrar por sinopse se fornecido
+        if ($synopsis) {
+            $query->where('synopsis', 'LIKE', '%' . $synopsis . '%');
+        }
+
+        // Aplicar ordenação
+        $query->orderBy($sort, $direction);
+
+        // Obter filmes paginados
+        $movies = $query->paginate(20);
+
+        // Obter gêneros únicos
+        $genres = Movie::distinct()->pluck('genre_code');
+
+        return view('index', ['movies' => $movies, 'genres' => $genres]);
     }
+
+    public function list(Request $request): View
+    {
+        $sort = $request->query('sort', 'id');
+        $direction = $request->query('direction', 'asc');
+        
+        $query = Movie::orderBy($sort, $direction);
+        
+        $movies = $query->paginate(20);
+
+        return view('lista', ['movies' => $movies]);
+    }
+    
 
     public function details(string $id): View
     {
@@ -80,23 +124,7 @@ public function update(Request $request, Movie $movie): RedirectResponse
 
     }
 
-    public function show(Movie $movie): View     
-    {         
-        return view('movies.show')->with('movie', $movie);     
-    } 
-
-    public function search(Request $request)
-{
-    $query = $request->input('query');
-
-    // Perform search logic, for example:
-    $movies = Movie::where('title', 'like', '%' . $query . '%')->get();
-
-    return view('movies.index', [
-        'movies' => $movies,
-        'query' => $query, // Pass query to re-populate search field if needed
-    ]);
-}
+    
 
 
 }

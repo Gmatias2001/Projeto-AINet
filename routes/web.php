@@ -57,14 +57,16 @@ Route::post('/mbway/process', [CartController::class, 'processMbway'])->name('mb
 Route::get('movieslist/create', [MovieController::class, 'create'])->name('movies.create'); ;
  
 Route::post('/movieslist', [MovieController::class, 'store'])->name('movies.store');
-Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
-
+Route::get('/movieslist', [MovieController::class, 'list'])->name('movies.index');
+Route::get('/', [MovieController::class, 'index'])->name('home');
 Route::get('movieslist/{id}/edit', [MovieController::class, 'edit'])->name('movies.edit');
 Route::put('movieslist/{id}', [MovieController::class, 'update'])->name('movies.update');
 
 Route::delete('movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
 
 Route::get('movies/{movie}', [MovieController::class, 'show'])->name('movies.show'); 
+
+
 
 require __DIR__.'/auth.php';
 

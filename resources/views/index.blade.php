@@ -12,6 +12,21 @@
                 Vive a magia do Cinema!
             </p>
         </div>
+
+        <!-- Barra de Pesquisa -->
+        <div class="w-full mb-6">
+            <form method="GET" action="{{ route('home') }}" class="flex">
+                <input type="text" name="title" placeholder="Digite o título" class="border border-gray-300 p-2 rounded-lg mr-2" value="{{ request('title') }}">
+                <input type="text" name="synopsis" placeholder="Digite a sinopse" class="border border-gray-300 p-2 rounded-lg mr-2" value="{{ request('synopsis') }}">
+                <select name="genre" class="border border-gray-300 p-2 rounded-lg mr-2">
+                    <option value="">Todos os Gêneros</option>
+                    @foreach ($genres as $genre)
+                        <option value="{{ $genre }}" {{ request('genre') == $genre ? 'selected' : '' }}>{{ $genre }}</option>
+                    @endforeach
+                </select>
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded-lg">Filtrar</button>
+            </form>
+        </div>
     </div>
 
     <div class="w-full container mx-auto grid grid-cols-3 gap-14 md:grid-cols-4">
