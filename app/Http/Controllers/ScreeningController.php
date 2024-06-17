@@ -52,4 +52,31 @@ class ScreeningController extends Controller
 
         return redirect()->route('screenings.index')->with('success', 'Screening deleted successfully.');
     }
+
+    public function edit(Screening $screening)
+    {
+        $movies = Movie::all();
+        $theaters = Theater::all();
+        return view('screenings.edit', compact('screening', 'movies', 'theaters'));
+    }
+
+    public function update(Request $request, Screening $screening)
+    {
+        $request->validate([
+            'movie_id' => 'required|exists:movies,id',
+            'theater_id' => 'required|exists:theaters,id',
+            'screening_time' => 'required|date',
+        ]);
+
+        $screeningTime = $request->input('screening_time');
+
+        $screening->update([
+            'movie_id' => $request->input('movie_id'),
+            'theater_id' => $request->input('theater_id'),
+            'start_time' => date('H:i:s', strtotime($screeningTime)),
+            'date' => date('Y-m-d', strtotime($screeningTime)),
+        ]);
+
+        return redirect()->route('screenings.index')->with('success', 'Screening updated successfully.');
+    }
 }
