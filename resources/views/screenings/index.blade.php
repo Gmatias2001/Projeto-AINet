@@ -81,7 +81,8 @@
                             <td class="py-2 px-4 border-b border-purple-200">{{ $screening->theater->name }}</td>
                             <td class="py-2 px-4 border-b border-purple-200">{{ $screening->date }}</td>
                             <td class="py-2 px-4 border-b border-purple-200">{{ $screening->start_time }}</td>
-                            <td class="py-2 px-4 border-b border-purple-200">
+                            <td class="py-2 px-4 border-b border-purple-200 flex space-x-2">
+                                <a href="{{ route('screenings.edit', $screening->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Edit</a>
                                 <form method="POST" action="{{ route('screenings.destroy', $screening->id) }}" class="inline">
                                     @csrf
                                     @method('DELETE')
@@ -93,8 +94,8 @@
                 </tbody>
             </table>
             <div class="mt-4">
-                {{ $screenings->appends(request()->query())->links() }}
-            </div>
+        {{ $screenings->appends(request()->query())->links() }}
+    </div>
         </div>
     </div>
 @endsection
