@@ -121,7 +121,7 @@ class MovieController extends Controller
 
         $url = route('movies.show', ['movie' => $movie]);
         $htmlMessage = "Movie <a href='$url'><u>{$movie->title}</u></a> ({$movie->id}) has been updated successfully!";
-        return redirect()->route('movies.show')
+        return redirect()->route('movies.show', ['movie' => $movie->id])
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
