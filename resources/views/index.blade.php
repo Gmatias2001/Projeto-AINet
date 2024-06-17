@@ -38,4 +38,7 @@
             </a>
         @endforeach
     </div>
+    <div class="mt-4">
+        {{ $movies->appends(request()->query())->links() }}
+    </div>
 @endsection
