@@ -4,14 +4,13 @@
 <body>
     <h2>Update Movie {{ $movie->id }}</h2>
 
-    <form method="POST" action=" /movieslist/{{$movie->id }}" enctype="multipart/form-data">
+    <form method="POST" action="/movieslist/{{ $movie->id }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         
         <div>
             <label for="title">Title</label>
-            <input type="text" name="title" id="title" value="{{ $movie->title }}" 
-            > 
+            <input type="text" name="title" id="title" value="{{ $movie->title }}"> 
         </div>
     
         <div>
@@ -43,20 +42,17 @@
         
         <div>
             <label for="year">Year</label>
-            <input type="text" name="year" id="year" value="{{ $movie->year }}" 
-            >
+            <input type="text" name="year" id="year" value="{{ $movie->year }}">
         </div>
         
         <div>
             <label for="trailer_url">Trailer URL</label>
-            <input type="text" name="trailer_url" id="trailer_url" value="{{ $movie->trailer_url }}"
-            >
+            <input type="text" name="trailer_url" id="trailer_url" value="{{ $movie->trailer_url }}">
         </div>
         
         <div>
             <label for="synopsis">Synopsis</label>
-            <textarea name="synopsis" id="synopsis" rows="10" required></textarea
-            value="{{$movie->synopsis}}">
+            <textarea name="synopsis" id="synopsis" rows="10" required>{{ $movie->synopsis }}</textarea>
         </div>
         
         <div>

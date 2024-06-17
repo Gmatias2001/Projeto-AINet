@@ -10,15 +10,64 @@ use Illuminate\Http\RedirectResponse;
 
 class MovieController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        //$allMovies = Movie::all();
-        //$screeningMovies = Screening::paginate(24);
+        $genre = $request->query('genre');
+        $title = $request->query('title');
+        $synopsis = $request->query('synopsis');
+        $sort = $request->query('sort', 'id');  // Ordenar por 'id' por padrão
+        $direction = $request->query('direction', 'asc');  // Ordenar por 'asc' por padrão
+        
+        // Obter IDs distintos de filmes em exibição
         $screeningMovies = Screening::distinct()->pluck('movie_id');
-        $Movies = Movie::whereIn('id', $screeningMovies)->paginate(20);
+        
+        // Construir a query para os filmes
+        $query = Movie::whereIn('id', $screeningMovies);
 
-        return view('index', ['movies' => $Movies]);
+        // Filtrar por gênero se fornecido
+        if ($genre) {
+            $query->where('genre_code', $genre);
+        }
+
+        // Filtrar por título se fornecido
+        if ($title) {
+            $query->where('title', 'LIKE', '%' . $title . '%');
+        }
+
+        // Filtrar por sinopse se fornecido
+        if ($synopsis) {
+            $query->where('synopsis', 'LIKE', '%' . $synopsis . '%');
+        }
+
+        // Aplicar ordenação
+        $query->orderBy($sort, $direction);
+
+        // Obter filmes paginados
+        $movies = $query->paginate(20);
+
+        // Obter gêneros únicos
+        $genres = Movie::distinct()->pluck('genre_code');
+
+        return view('index', ['movies' => $movies, 'genres' => $genres]);
     }
+
+    public function list(Request $request): View
+    {
+        $sort = $request->query('sort', 'id');
+        $direction = $request->query('direction', 'asc');
+        
+        $query = Movie::orderBy($sort, $direction);
+        
+        $movies = $query->paginate(20);
+
+        return view('lista', ['movies' => $movies]);
+    }
+
+    public function show(Movie $movie): View     
+    {         
+        return view('movies.show')->with('movie', $movie);     
+    } 
+    
 
     public function details(string $id): View
     {
@@ -42,22 +91,14 @@ class MovieController extends Controller
 
     public function store(Request $request): RedirectResponse 
 { 
-    $validatedData = $request->validate([
-        'title' => 'required|string|max:255',
-        'genre_code' => 'required|string|max:255',
-        'year' => 'required|integer',
-        'trailer_url' => 'nullable|url',
-        'synopsis' => 'required|string',
-        'poster_filename' => 'nullable|file|mimes:jpg,jpeg,png',
-    ]);
-
-     //Handle the file upload if there's any
+    Movie::create($request->all());
+    return redirect('/movieslist');
+        
+     
     if ($request->hasFile('poster_filename')) {
         $validatedData['poster_filename'] = $request->file('poster_filename')->store('posters', 'public');
-    }
-
-   Movie::create($validatedData); 
-    return redirect()->route('movies.index')->with('success', 'Movie added successfully');
+    } 
+  
 }
     
     
@@ -72,31 +113,23 @@ public function edit(Movie $movie): View
 
 public function update(Request $request, Movie $movie): RedirectResponse
 {
-    $validatedData = $request->validate([
-        'title' => 'required|string|max:255',
-        'genre_code' => 'required|string',
-        'year' => 'required|integer|min:1888|max:' . date('Y'),
-        'trailer_url' => 'nullable|url',
-        'synopsis' => 'required|string',
-        'poster_filename' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    if ($request->hasFile('poster_filename')) {
-        $file = $request->file('poster_filename');
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('posters'), $filename);
-        $validatedData['poster_filename'] = $filename;
-    }
-
-    $movie->update($validatedData);
-    return redirect('/movies');
+    $movie->update($request->all()); 
+    return redirect('/movies'); 
 }
 
 
    
 
 
-    public function destroy(Movie $movie)
+    public function destroy(Movie $movie): RedirectResponse
     {
+        $movie->delete();     
+        return redirect('/movieslist'); 
+
+
     }
+
+    
+
+
 }

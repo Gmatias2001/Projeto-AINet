@@ -3,7 +3,7 @@
 @section('content')
 <body>
     <h2>New Movie</h2>
-    <form method="POST" action="{{ route('movies.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="/movieslist" enctype="multipart/form-data">
         @csrf
         <div>
             <label for="title">Title</label>
