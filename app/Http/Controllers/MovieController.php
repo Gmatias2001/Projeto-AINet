@@ -7,6 +7,8 @@ use App\Models\Movie;
 use App\Models\Screening;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\MovieFormRequest;
 
 class MovieController extends Controller
 {
@@ -93,17 +95,13 @@ class MovieController extends Controller
 { 
     Movie::create($request->all());
     return redirect('/movieslist');
-        
-     
+
+
     if ($request->hasFile('poster_filename')) {
         $validatedData['poster_filename'] = $request->file('poster_filename')->store('posters', 'public');
-    } 
-  
+    }
+
 }
-    
-    
-
-
 
 public function edit(Movie $movie): View
 {
@@ -111,25 +109,57 @@ public function edit(Movie $movie): View
 }
 
 
-public function update(Request $request, Movie $movie): RedirectResponse
+public function update(MovieFormRequest $request, Movie $movie): RedirectResponse
 {
-    $movie->update($request->all()); 
-    return redirect('/movies'); 
+    $movie->update($request->validated());
+
+        if ($request->hasFile('poster_filename')) {
+            if ($movie->imageExists) {
+                Storage::delete("public/courses/{$movie->poster_filename}");
+            }
+            $request->image_file->storeAs('public/storage/posters', $movie->poster_filename);
+        }
+
+        $url = route('movies.show', ['movie' => $movie]);
+        $htmlMessage = "Movie <a href='$url'><u>{$movie->title}</u></a> ({$movie->id}) has been updated successfully!";
+        return redirect()->route('movies.show')
+            ->with('alert-type', 'success')
+            ->with('alert-msg', $htmlMessage);
 }
 
 
-   
+
 
 
     public function destroy(Movie $movie): RedirectResponse
     {
-        $movie->delete();     
-        return redirect('/movieslist'); 
+        $movie->delete();
+        return redirect('/movieslist');
 
 
     }
 
+<<<<<<< Updated upstream
     
+=======
+    public function show(Movie $movie): View
+    {
+        return view('movies.show')->with('movie', $movie);
+    }
+
+    public function search(Request $request)
+{
+    $query = $request->input('query');
+
+    // Perform search logic, for example:
+    $movies = Movie::where('title', 'like', '%' . $query . '%')->get();
+
+    return view('movies.index', [
+        'movies' => $movies,
+        'query' => $query, // Pass query to re-populate search field if needed
+    ]);
+}
+>>>>>>> Stashed changes
 
 
 }

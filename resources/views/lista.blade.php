@@ -55,8 +55,14 @@
                             <td class="py-2 px-4 border-b border-purple-200">{{ $movie->title }}</td>
                             <td class="py-2 px-4 border-b border-purple-200">{{ $movie->genre_code }}</td>
                             <td class="py-2 px-4 border-b border-purple-200 flex space-x-2">
+<<<<<<< Updated upstream
                                 <a href="/movieslist/{{ $movie->id }}/edit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Update</a>
                                 <a href="{{ route('movies.show', ['movie' => $movie]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">View</a> 
+=======
+
+                                <a href="{{ route('movies.edit', ['movie' => $movie]) }}" text="Edit" type="primary" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded"> Edit</a>
+                                <a href="{{ route('movies.show', ['movie' => $movie]) }}">View</a>
+>>>>>>> Stashed changes
                                 <form method="POST" action="{{ route('movies.destroy', ['movie' => $movie]) }}" class="inline">
                                     @csrf
                                     @method('DELETE')
