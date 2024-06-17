@@ -68,41 +68,6 @@
                     :imageUrl="$movie - > poster_filename" />
             </div>
 
-            <div class=" flex-col space-y-4 items-stretch mt-4">
-                <div>
-                    <div class="flex flex-row items-center">
-                        <input id="id_{{ $movie->title }}" name="{{ $title }}" type="file"
-                            accept="image/png, image/jpeg"
-                            onchange="document.getElementById('id_{{ $title }}_selected_file').innerHTML= document.getElementById('id_{{ $title }}').files[0].title ?? ''"
-                            class="hidden" />
-                        <label for="id_{{ $title }}"
-                            class="min-w-32
-                            px-4 py-2 mr-2 inline-block border border-transparent
-                            rounded-md
-                            font-medium text-sm tracking-widest
-                            focus:outline-none focus:ring-2
-                            focus:ring-indigo-500 dark:focus:ring-indigo-400
-                            focus:ring-offset-2 transition ease-in-out duration-150
-                            text-white dark:text-gray-900
-                            bg-gray-800 dark:bg-gray-200
-                            hover:bg-gray-900 dark:hover:bg-gray-100
-                            focus:bg-gray-900 dark:focus:bg-gray-100
-                            active:bg-gray-950 dark:active:bg-gray-50
-                            cursor-pointer">Choose file</label>
-                        <label id="id_{{ $title }}_selected_file"
-                            class="text-sm text-slate-500 truncate"></label>
-                    </div>
-                    @error($name)
-                        <div class="text-sm text-red-500">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-                @if ($deleteAllow)
-                    <div>
-                        <button element="submit" :text="$deleteTitle" type="danger" form="{{ $deleteForm }}">Submit</button>
-                    </div>
-                @endif
-            </div>
+
     </form>
 </div>
