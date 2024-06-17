@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\Movie;
 use App\Models\Screening;
 use App\Models\Seat;
+use App\Models\Purchase;
 use Illuminate\Support\Facades\Session;
 
 class TicketController extends Controller
@@ -32,14 +33,12 @@ class TicketController extends Controller
         $screening = Screening::findOrFail($screeningId);
         $seat = Seat::findOrFail($request->seat_id);
 
-
-        
         // Cria o ticket com base nos dados fornecidos
         $ticket = Ticket::create([
             'screening_id' => $screening->id,
             'seat_id' => $seat->id,
             'purchase_id' => null,
-            'price' => $screening->ticket_price, // Supondo que o preço do ingresso seja obtido da sessão de cinema
+            'price' => $screening->ticket_price,
             'qrcode_url' => $this->generateQrCodeUrl(),
             'status' => 'pending',
             'movie_name' => $movie->title,
@@ -50,10 +49,10 @@ class TicketController extends Controller
         $cart = collect(session('cart', []));
 
         $exists = $cart->contains(function ($cartItem) use ($ticket) {
-            return $cartItem->screening_id == $ticket->screening_id 
+            return $cartItem->screening_id == $ticket->screening_id
                 && $cartItem->seat_id == $ticket->seat_id;
         });
-    
+
         if ($exists) {
             $alertType = 'warning';
             $htmlMessage = "Ticket for movie <strong>\"{$movie->title}\"</strong> on <strong>{$screening->date} at {$screening->start_time}</strong> was not added to the cart because it is already there!";
