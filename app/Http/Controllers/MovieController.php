@@ -42,22 +42,14 @@ class MovieController extends Controller
 
     public function store(Request $request): RedirectResponse 
 { 
-    $validatedData = $request->validate([
-        'title' => 'required|string|max:255',
-        'genre_code' => 'required|string|max:255',
-        'year' => 'required|integer',
-        'trailer_url' => 'nullable|url',
-        'synopsis' => 'required|string',
-        'poster_filename' => 'nullable|file|mimes:jpg,jpeg,png',
-    ]);
-
-     //Handle the file upload if there's any
+    Movie::create($request->all());
+    return redirect('/movieslist');
+        
+     
     if ($request->hasFile('poster_filename')) {
         $validatedData['poster_filename'] = $request->file('poster_filename')->store('posters', 'public');
-    }
-
-   Movie::create($validatedData); 
-    return redirect()->route('movies.index')->with('success', 'Movie added successfully');
+    } 
+  
 }
     
     
@@ -72,31 +64,39 @@ public function edit(Movie $movie): View
 
 public function update(Request $request, Movie $movie): RedirectResponse
 {
-    $validatedData = $request->validate([
-        'title' => 'required|string|max:255',
-        'genre_code' => 'required|string',
-        'year' => 'required|integer|min:1888|max:' . date('Y'),
-        'trailer_url' => 'nullable|url',
-        'synopsis' => 'required|string',
-        'poster_filename' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    if ($request->hasFile('poster_filename')) {
-        $file = $request->file('poster_filename');
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('posters'), $filename);
-        $validatedData['poster_filename'] = $filename;
-    }
-
-    $movie->update($validatedData);
-    return redirect('/movies');
+    $movie->update($request->all()); 
+    return redirect('/movies'); 
 }
 
 
    
 
 
-    public function destroy(Movie $movie)
+    public function destroy(Movie $movie): RedirectResponse
     {
+        $movie->delete();     
+        return redirect('/movieslist'); 
+
+
     }
+
+    public function show(Movie $movie): View     
+    {         
+        return view('movies.show')->with('movie', $movie);     
+    } 
+
+    public function search(Request $request)
+{
+    $query = $request->input('query');
+
+    // Perform search logic, for example:
+    $movies = Movie::where('title', 'like', '%' . $query . '%')->get();
+
+    return view('movies.index', [
+        'movies' => $movies,
+        'query' => $query, // Pass query to re-populate search field if needed
+    ]);
+}
+
+
 }
