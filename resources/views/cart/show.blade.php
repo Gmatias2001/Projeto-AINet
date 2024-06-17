@@ -36,7 +36,7 @@
                 </th>
                 <th class="py-2">
                     <form action="{{ route('cart.remove', $item->id) }}" method="POST">
-                        @csrf
+                    @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Remover</button>
                     </form>
@@ -49,16 +49,18 @@
     <form action="{{ route('cart.destroy') }}" method="post" class="mt-4">
         @csrf
         @method('DELETE')
-        <button type="submit" class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
-        Limpar Carrinho
+        <button type="submit"
+            class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
+            Limpar Carrinho
         </button>
-        
+
     </form>
-    
+
     <!-- Botão de checkout -->
     <form action="{{ route('checkout.form') }}" method="get" class="mt-4">
-    <button type="submit" class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
-    Checkout
+        <button type="submit"
+            class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
+            Checkout
         </button>
     </form>
     @endif
