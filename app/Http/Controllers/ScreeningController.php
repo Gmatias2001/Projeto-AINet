@@ -47,4 +47,11 @@ class ScreeningController extends Controller
 
         return view('screenings.index', compact('screenings', 'sort', 'direction'));
     }
+
+    public function destroy(Screening $screening)
+    {
+        $screening->delete();
+
+        return redirect()->route('screenings.index')->with('success', 'Screening deleted successfully.');
+    }
 }
