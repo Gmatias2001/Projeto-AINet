@@ -51,16 +51,14 @@ Route::post('/movieslist', [MovieController::class, 'store'])->name('movies.stor
 //<<<<<<< Updated upstream
 
 
-//Route::get('/movieslist', [MovieController::class, 'list'])->name('movies.index');
+Route::get('/movieslist', [MovieController::class, 'list'])->name('movies.index');
 //Route::get('/', [MovieController::class, 'index'])->name('home');
 //Route::get('movieslist/{id}/edit', [MovieController::class, 'edit'])->name('movies.edit');
 //Route::put('movieslist/{id}', [MovieController::class, 'update'])->name('movies.update');
 
-
 //=======
 
-
-Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+//Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 
 Route::resource('movies', MovieController::class)->except(['show']);
 Route::put('movies/{movie}/edit', [MovieController::class, 'update'])->name('movies.update');
@@ -79,7 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::get('screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
     Route::post('screenings', [ScreeningController::class, 'store'])->name('screenings.store');
     Route::delete('screenings/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
-    Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit'); 
+    Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
     Route::put('screenings/{screening}', [ScreeningController::class, 'update'])->name('screenings.update');
 });
 
