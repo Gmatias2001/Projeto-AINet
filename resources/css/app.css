@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sortable-column {
+    color: #4a5568; /* Cor do texto */
+    text-decoration: none; /* Remover sublinhado */
+    font-weight: bold; /* Negrito */
+    cursor: pointer; /* Mudar cursor para mãozinha */
+}
+
+.sortable-column:hover {
+    color: #2d3748; /* Cor do texto ao passar o mouse */
+    text-decoration: underline; /* Sublinhado ao passar o mouse */
+}

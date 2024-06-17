@@ -52,7 +52,10 @@ Route::post('/mbway/process', [CartController::class, 'processMbway'])->name('mb
 
 
 
-
+Route::middleware(['web'])->group(function () {
+    Route::get('movieslist/{id}/edit', [MovieController::class, 'edit'])->name('movies.edit');
+    Route::put('movieslist/{id}', [MovieController::class, 'update'])->name('movies.update');
+});
 
 Route::get('movieslist/create', [MovieController::class, 'create'])->name('movies.create'); ;
  

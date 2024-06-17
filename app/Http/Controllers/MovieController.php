@@ -62,6 +62,11 @@ class MovieController extends Controller
 
         return view('lista', ['movies' => $movies]);
     }
+
+    public function show(Movie $movie): View     
+    {         
+        return view('movies.show')->with('movie', $movie);     
+    } 
     
 
     public function details(string $id): View

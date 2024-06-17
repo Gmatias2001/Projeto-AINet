@@ -10,7 +10,7 @@
                 <thead>
                     <tr class="bg-purple-300">
                         <th class="py-2 px-4 border-b border-purple-200">
-                            <a href="{{ route('movies.index', array_merge(request()->query(), ['sort' => 'id', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}">
+                            <a href="{{ route('movies.index', array_merge(request()->query(), ['sort' => 'id', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}" class="sortable-column">
                                 ID
                                 @if(request('sort') === 'id')
                                     @if(request('direction') === 'asc')
@@ -22,7 +22,7 @@
                             </a>
                         </th>
                         <th class="py-2 px-4 border-b border-purple-200">
-                            <a href="{{ route('movies.index', array_merge(request()->query(), ['sort' => 'title', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}">
+                            <a href="{{ route('movies.index', array_merge(request()->query(), ['sort' => 'title', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}" class="sortable-column">
                                 Title
                                 @if(request('sort') === 'title')
                                     @if(request('direction') === 'asc')
@@ -34,7 +34,7 @@
                             </a>
                         </th>
                         <th class="py-2 px-4 border-b border-purple-200">
-                            <a href="{{ route('movies.index', array_merge(request()->query(), ['sort' => 'genre_code', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}">
+                            <a href="{{ route('movies.index', array_merge(request()->query(), ['sort' => 'genre_code', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc'])) }}" class="sortable-column">
                                 Genre Code
                                 @if(request('sort') === 'genre_code')
                                     @if(request('direction') === 'asc')
