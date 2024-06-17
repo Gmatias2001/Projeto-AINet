@@ -1,22 +1,32 @@
-<!-- resources/views/compra/formulario.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')
 <div class="container mx-auto mt-8">
     <h1 class="text-5xl font-bold mb-8">Finalizar Compra</h1>
 
+    @php
+        $cart = session('cart', []);
+        $ticket_price = 9.0;
+        $total = count($cart) * $ticket_price;
+        $user = Auth::user();
+        if ($user) {
+            $total *= 0.9; // Aplicar 10% de desconto para usuários autenticados
+        }
+    @endphp
+    
+    <p class="mb-4">Total a pagar: {{ number_format($total, 2) }} €</p>
+
     <form action="{{ route('checkout.process') }}" method="POST">
         @csrf
 
         <div class="mb-4">
             <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" required>
+            <input type="text" id="nome" name="nome" value="{{ $user ? $user->name : '' }}" required>
         </div>
 
         <div class="mb-4">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" value="{{ $user ? $user->email : '' }}" required>
         </div>
 
         <div class="mb-4">
@@ -33,7 +43,40 @@
             </select>
         </div>
 
-        <button type="submit">Avançar</button>
+        <div id="payment_fields" class="payment-fields mb-4" style="display: none;">
+            <label for="ref_pagamento">Referência de Pagamento:</label>
+            <input type="text" id="ref_pagamento" name="ref_pagamento" maxlength="16" required>
+        </div>
+
+        <div id="cvc_field" class="mb-4" style="display: none;">
+            <label for="cvc_code">Código CVC:</label>
+            <input type="text" id="cvc_code" name="cvc_code" minlength="3" maxlength="3" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Continuar para Pagamento</button>
     </form>
 </div>
+
+<script>
+    // Mostra os campos específicos dependendo do tipo de pagamento selecionado
+    document.getElementById('tipo_pagamento').addEventListener('change', function () {
+        var paymentType = this.value;
+        if (paymentType === 'visa') {
+            document.getElementById('payment_fields').style.display = 'block';
+            document.getElementById('cvc_field').style.display = 'block';
+            document.getElementById('ref_pagamento').placeholder = 'Número do Cartão Visa';
+        } else if (paymentType === 'paypal') {
+            document.getElementById('payment_fields').style.display = 'block';
+            document.getElementById('cvc_field').style.display = 'block';
+            document.getElementById('ref_pagamento').placeholder = 'Email do PayPal';
+        } else if (paymentType === 'mbway') {
+            document.getElementById('payment_fields').style.display = 'block';
+            document.getElementById('cvc_field').style.display = 'block';
+            document.getElementById('ref_pagamento').placeholder = 'Número MBWay';
+        } else {
+            document.getElementById('payment_fields').style.display = 'none';
+            document.getElementById('cvc_field').style.display = 'none';
+        }
+    });
+</script>
 @endsection
